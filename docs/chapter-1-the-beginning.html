@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1: The Beginning - Prajna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f0;
+            padding: 20px;
+        }
+        
+        .book-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px 80px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+        
+        .book-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .book-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        
+        .post-meta {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        
+        .post-content {
+            font-size: 1.1em;
+            text-align: justify;
+        }
+        
+        .post-content h1,
+        .post-content h2,
+        .post-content h3 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        
+        .post-content h1 {
+            font-size: 2em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .post-content h2 {
+            font-size: 1.6em;
+        }
+        
+        .post-content h3 {
+            font-size: 1.3em;
+        }
+        
+        .post-content p {
+            margin-bottom: 20px;
+        }
+        
+        .post-content ul,
+        .post-content ol {
+            margin: 20px 0 20px 30px;
+        }
+        
+        .post-content li {
+            margin-bottom: 10px;
+        }
+        
+        .post-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .post-content pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid #ddd;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .post-content a {
+            color: #0066cc;
+            text-decoration: none;
+            border-bottom: 1px solid #0066cc;
+        }
+        
+        .post-content a:hover {
+            color: #004499;
+            border-bottom-color: #004499;
+        }
+        
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        @media (max-width: 768px) {
+            .book-container {
+                padding: 30px 20px;
+            }
+            
+            .book-title {
+                font-size: 1.8em;
+            }
+            
+            .post-content {
+                font-size: 1em;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .book-container {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book-header">
+            <h1 class="book-title">Chapter 1: The Beginning</h1>
+            <div class="post-meta">
+                Published on 2024-01-01
+                 by Prajna Author
+            </div>
+        </div>
+        <div class="post-content">
+            <h1 id="welcome-to-prajna">Welcome to Prajna</h1>
+<p>This is the first chapter of our book, written in <strong>Jekyll format</strong> markdown. The system will render this into beautiful HTML pages that look like a real book.</p>
+<h2 id="what-is-prajna">What is Prajna?</h2>
+<p>Prajna is a static site generator that takes markdown files from the <code>_posts</code> folder and converts them into HTML pages. Each post is rendered with a book-like layout, making it perfect for:</p>
+<ul>
+<li>Writing books</li>
+<li>Creating documentation</li>
+<li>Building knowledge bases</li>
+<li>Publishing long-form content</li>
+</ul>
+<h2 id="features">Features</h2>
+<p>The system supports all standard markdown features:</p>
+<h3 id="lists">Lists</h3>
+<ol>
+<li>Ordered lists</li>
+<li>With multiple items</li>
+<li>Like this one</li>
+</ol>
+<p>And unordered lists:</p>
+<ul>
+<li>Bullet points</li>
+<li>Another bullet</li>
+<li>And another</li>
+</ul>
+<h3 id="code-blocks">Code Blocks</h3>
+<p>You can include inline <code>code</code> or full code blocks:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello, Prajna!&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="quotes">Quotes</h3>
+<blockquote>
+<p>"The journey of a thousand miles begins with a single step."</p>
+<p>— Ancient Proverb</p>
+</blockquote>
+<h2 id="getting-started">Getting Started</h2>
+<p>To use Prajna, simply:</p>
+<ol>
+<li>Create markdown files in the <code>_posts</code> folder</li>
+<li>Use Jekyll front matter (YAML between <code>---</code> markers)</li>
+<li>Run the <code>prajna.py</code> script</li>
+<li>Find your rendered HTML in the <code>_site</code> folder</li>
+</ol>
+<p>That's it! Your content will be beautifully formatted and ready to share.</p>
+        </div>
+    </div>
+</body>
+</html>

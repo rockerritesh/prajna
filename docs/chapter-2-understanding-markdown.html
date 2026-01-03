@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Understanding Markdown - Prajna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f0;
+            padding: 20px;
+        }
+        
+        .book-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px 80px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+        
+        .book-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .book-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        
+        .post-meta {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        
+        .post-content {
+            font-size: 1.1em;
+            text-align: justify;
+        }
+        
+        .post-content h1,
+        .post-content h2,
+        .post-content h3 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        
+        .post-content h1 {
+            font-size: 2em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .post-content h2 {
+            font-size: 1.6em;
+        }
+        
+        .post-content h3 {
+            font-size: 1.3em;
+        }
+        
+        .post-content p {
+            margin-bottom: 20px;
+        }
+        
+        .post-content ul,
+        .post-content ol {
+            margin: 20px 0 20px 30px;
+        }
+        
+        .post-content li {
+            margin-bottom: 10px;
+        }
+        
+        .post-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .post-content pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid #ddd;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .post-content a {
+            color: #0066cc;
+            text-decoration: none;
+            border-bottom: 1px solid #0066cc;
+        }
+        
+        .post-content a:hover {
+            color: #004499;
+            border-bottom-color: #004499;
+        }
+        
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        @media (max-width: 768px) {
+            .book-container {
+                padding: 30px 20px;
+            }
+            
+            .book-title {
+                font-size: 1.8em;
+            }
+            
+            .post-content {
+                font-size: 1em;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .book-container {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book-header">
+            <h1 class="book-title">Chapter 2: Understanding Markdown</h1>
+            <div class="post-meta">
+                Published on 2024-01-02
+                 by Prajna Author
+            </div>
+        </div>
+        <div class="post-content">
+            <h1 id="markdown-syntax-guide">Markdown Syntax Guide</h1>
+<p>In this chapter, we'll explore the various markdown features supported by Prajna.</p>
+<h2 id="headers">Headers</h2>
+<p>You can create headers at different levels using <code>#</code> symbols:</p>
+<h1 id="h1-header">H1 Header</h1>
+<h2 id="h2-header">H2 Header</h2>
+<h3 id="h3-header">H3 Header</h3>
+<h2 id="text-formatting">Text Formatting</h2>
+<p>Make text <strong>bold</strong> or <em>italic</em>. You can also combine them: <strong><em>bold and italic</em></strong>.</p>
+<h2 id="links-and-images">Links and Images</h2>
+<p>Create <a href="https://example.com">links to other pages</a> easily.</p>
+<p>Images work too:</p>
+<div class="codehilite"><pre><span></span><code><span class="o">!</span><span class="p">[</span><span class="n">Alt</span><span class="w"> </span><span class="n">text</span><span class="p">](</span><span class="n">image</span><span class="p">.</span><span class="n">jpg</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="tables">Tables</h2>
+<p>Markdown supports tables as well:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Markdown parsing</td>
+<td>✓</td>
+<td>High</td>
+</tr>
+<tr>
+<td>HTML rendering</td>
+<td>✓</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Book layout</td>
+<td>✓</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Code highlighting</td>
+<td>✓</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<h2 id="advanced-features">Advanced Features</h2>
+<h3 id="nested-lists">Nested Lists</h3>
+<ol>
+<li>First item</li>
+<li>Sub-item A</li>
+<li>Sub-item B</li>
+<li>Second item</li>
+<li>Another sub-item<ul>
+<li>Even deeper!</li>
+</ul>
+</li>
+</ol>
+<h3 id="block-quotes">Block Quotes</h3>
+<blockquote>
+<p>Markdown is a lightweight markup language for creating formatted text.</p>
+<p>It's perfect for writing content that needs to be both human-readable
+and easily convertible to HTML.</p>
+</blockquote>
+<h2 id="horizontal-rules">Horizontal Rules</h2>
+<p>You can add horizontal rules to separate sections:</p>
+<hr />
+<p>And that's a quick overview of markdown in Prajna!</p>
+        </div>
+    </div>
+</body>
+</html>

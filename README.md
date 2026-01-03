@@ -42,7 +42,7 @@ pip install -r requirements.txt
    python3 prajna.py
    ```
 
-3. View the generated HTML files in the `_site` folder
+3. View the generated HTML files in the `docs` folder
 
 ### Writing Posts
 
@@ -97,7 +97,7 @@ markdown: kramdown
 
 # Book settings
 book:
-  output_dir: _site
+  output_dir: docs
   posts_dir: _posts
   template_dir: _layouts
 ```
@@ -122,7 +122,7 @@ prajna/
 │   └── 2024-01-02-chapter-2.md
 ├── _layouts/            # HTML templates
 │   └── post.html
-├── _site/               # Generated HTML files (output)
+├── docs/                # Generated HTML files (output)
 ├── prajna.py            # Main renderer script
 ├── requirements.txt     # Python dependencies
 └── README.md           # This file
@@ -137,6 +137,20 @@ The repository includes three sample posts demonstrating various features:
 3. **Chapter 3: The Future** - Use cases and best practices
 
 Run `python3 prajna.py` to see them rendered!
+
+## GitHub Actions
+
+The repository includes a GitHub Actions workflow that automatically generates HTML from your markdown posts whenever you push to the main/master branch. The workflow:
+
+1. Sets up Python environment
+2. Installs dependencies from `requirements.txt`
+3. Runs `prajna.py` to generate HTML files
+4. Commits and pushes the generated files to the `docs` folder
+
+The workflow is triggered on:
+- Push to main/master branches
+- Pull requests to main/master branches
+- Manual workflow dispatch
 
 ## Requirements
 

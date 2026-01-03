@@ -10,6 +10,6 @@ permalink: /:year/:month/:day/:title/
 
 # Book settings
 book:
-  output_dir: _site
+  output_dir: docs
   posts_dir: _posts
   template_dir: _layouts
