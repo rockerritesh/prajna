@@ -1,0 +1,15 @@
+# Site settings
+title: Prajna
+description: A book rendered from Jekyll-format markdown
+baseurl: ""
+url: ""
+
+# Build settings
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
+
+# Book settings
+book:
+  output_dir: _site
+  posts_dir: _posts
+  template_dir: _layouts
