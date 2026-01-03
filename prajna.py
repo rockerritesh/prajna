@@ -9,7 +9,7 @@ import yaml
 import markdown
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 
 class PrajnaRenderer:
@@ -40,7 +40,7 @@ class PrajnaRenderer:
                 return yaml.safe_load(f) or {}
         return {}
     
-    def _parse_front_matter(self, content: str) -> tuple[Dict, str]:
+    def _parse_front_matter(self, content: str) -> Tuple[Dict, str]:
         """Parse YAML front matter from markdown content"""
         # Jekyll front matter is between --- markers
         front_matter_pattern = r'^---\s*\n(.*?)\n---\s*\n(.*)$'
@@ -118,8 +118,8 @@ class PrajnaRenderer:
         filename = re.sub(date_pattern, '', filename)
         return f"{filename}.html"
     
-    def render_post(self, post_file: Path) -> bool:
-        """Render a single post file to HTML"""
+    def render_post(self, post_file: Path) -> Optional[Dict]:
+        """Render a single post file to HTML and return post metadata"""
         try:
             # Read the markdown file
             with open(post_file, 'r', encoding='utf-8') as f:
@@ -165,11 +165,19 @@ class PrajnaRenderer:
                 f.write(rendered_html)
             
             print(f"✓ Rendered: {post_file.name} -> {output_filename}")
-            return True
+            
+            # Return metadata for index generation
+            return {
+                'title': context['title'],
+                'date': context['date'],
+                'author': context['author'],
+                'description': context['description'],
+                'filename': output_filename
+            }
             
         except Exception as e:
             print(f"✗ Error rendering {post_file.name}: {e}")
-            return False
+            return None
     
     def render_all_posts(self) -> int:
         """Render all posts in the _posts directory"""
@@ -190,21 +198,10 @@ class PrajnaRenderer:
         posts_info = []
         success_count = 0
         for post_file in post_files:
-            if self.render_post(post_file):
+            post_metadata = self.render_post(post_file)
+            if post_metadata:
                 success_count += 1
-                # Collect post info for index
-                with open(post_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                front_matter, _ = self._parse_front_matter(content)
-                date = front_matter.get('date') or self._extract_date_from_filename(post_file.name)
-                output_filename = self._get_output_filename(post_file, front_matter)
-                posts_info.append({
-                    'title': front_matter.get('title', post_file.stem),
-                    'date': date or '',
-                    'author': front_matter.get('author', ''),
-                    'description': front_matter.get('description', ''),
-                    'filename': output_filename
-                })
+                posts_info.append(post_metadata)
         
         # Generate index page
         if posts_info:
