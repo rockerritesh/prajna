@@ -2,110 +2,763 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#f5f5f0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Prajna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Light mode (default) */
+            --bg-primary: #f5f5f0;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f9f9f7;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #333333;
+            --border-light: #dddddd;
+            --link-color: #8b4513;
+            --link-hover: #5d2f0d;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #8b4513;
+            --page-texture: linear-gradient(to right, rgba(0,0,0,0.02) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.02) 100%);
+        }
+
+        /* Night mode - warm sepia tones for comfortable reading */
+        [data-theme="night"] {
+            --bg-primary: #2c2416;
+            --bg-secondary: #3d3226;
+            --bg-tertiary: #4a3f32;
+            --text-primary: #e8dcc8;
+            --text-secondary: #d4c8b4;
+            --text-muted: #a89880;
+            --border-color: #7a6a52;
+            --border-light: #5a4a3a;
+            --link-color: #d4a574;
+            --link-hover: #e8c9a0;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --accent-color: #d4a574;
+            --page-texture: linear-gradient(to right, rgba(0,0,0,0.05) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.05) 100%);
+        }
+
+        /* Dark mode - true dark for AMOLED screens */
+        [data-theme="dark"] {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #252525;
+            --text-primary: #e5e5e5;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --border-color: #444444;
+            --border-light: #333333;
+            --link-color: #6db3f2;
+            --link-hover: #8cc4f7;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --accent-color: #6db3f2;
+            --page-texture: none;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            line-height: 1.8;
-            color: #333;
-            background: #f5f5f0;
-            padding: 20px;
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
         }
         
-        .book-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 60px 80px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        body {
+            font-family: 'Libre Baskerville', 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 0;
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Top Toolbar */
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 999;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .site-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .site-name svg {
+            width: 28px;
+            height: 28px;
+            color: var(--accent-color);
+        }
+
+        .toolbar-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+        }
+
+        .toolbar-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Theme Selector Dropdown */
+        .theme-selector {
+            position: relative;
+        }
+
+        .theme-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            display: none;
+            min-width: 160px;
+            z-index: 1001;
+        }
+
+        .theme-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .theme-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .theme-option.active {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+        }
+
+        .theme-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .theme-icon.light {
+            background: linear-gradient(135deg, #fff9e6, #f5f5f0);
+            border: 1px solid #ddd;
+        }
+
+        .theme-icon.night {
+            background: linear-gradient(135deg, #4a3f32, #2c2416);
+            border: 1px solid #7a6a52;
+        }
+
+        .theme-icon.dark {
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #444;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Book Container */
+        .book-wrapper {
+            margin-top: 60px;
+            padding: 20px;
+        }
+
+        .book-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            padding: 60px 80px;
+            box-shadow: 
+                0 0 20px var(--shadow-color),
+                inset 0 0 60px rgba(0,0,0,0.02);
+            min-height: calc(100vh - 100px);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Book spine shadow effect */
+        .book-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0.1) 0%,
+                rgba(0,0,0,0.05) 30%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+
+        /* Page texture effect */
+        .book-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--page-texture);
+            pointer-events: none;
         }
         
         .book-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             padding-bottom: 30px;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        /* Decorative book icon */
+        .book-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Decorative header ornament */
+        .book-header::after {
+            content: '❧';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0 15px;
         }
         
         .book-title {
-            font-size: 3em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #1a1a1a;
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
         
         .book-description {
             font-style: italic;
-            color: #666;
-            font-size: 1.1em;
+            color: var(--text-muted);
+            font-size: 1.15em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Chapter counter */
+        .chapters-info {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: var(--text-muted);
         }
         
+        /* Table of Contents */
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .toc-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
         .posts-list {
             list-style: none;
+            position: relative;
+            z-index: 1;
         }
         
         .post-item {
-            margin-bottom: 30px;
-            padding: 20px;
-            border-left: 4px solid #333;
-            background: #f9f9f9;
+            margin-bottom: 25px;
+            padding: 25px 30px;
+            border-left: 4px solid var(--border-color);
+            background: var(--bg-tertiary);
             transition: all 0.3s ease;
+            border-radius: 0 12px 12px 0;
+            position: relative;
+        }
+
+        .post-item::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-color);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
         
         .post-item:hover {
-            background: #f5f5f5;
-            border-left-color: #666;
+            background: var(--bg-secondary);
+            box-shadow: 0 5px 25px var(--shadow-color);
+            transform: translateX(5px);
+        }
+
+        .post-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Chapter number badge */
+        .chapter-badge {
+            position: absolute;
+            left: -45px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 700;
         }
         
         .post-link {
             text-decoration: none;
-            color: #1a1a1a;
+            color: inherit;
+            display: block;
         }
         
         .post-title {
-            font-size: 1.8em;
+            font-size: 1.5em;
             margin-bottom: 10px;
-            color: #1a1a1a;
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.3;
+            transition: color 0.2s ease;
+        }
+
+        .post-item:hover .post-title {
+            color: var(--accent-color);
         }
         
         .post-meta {
             font-size: 0.9em;
-            color: #666;
-            margin-bottom: 10px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .post-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .post-meta svg {
+            width: 14px;
+            height: 14px;
         }
         
         .post-description {
-            color: #555;
+            color: var(--text-secondary);
             font-size: 1em;
+            line-height: 1.6;
+        }
+
+        /* Bookmarked indicator */
+        .bookmark-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--accent-color);
+            display: none;
+        }
+
+        .bookmark-indicator.show {
+            display: block;
+        }
+
+        .bookmark-indicator svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Reading progress indicator */
+        .reading-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+            color: var(--accent-color);
+            background: rgba(139, 69, 19, 0.1);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        [data-theme="night"] .reading-status {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        [data-theme="dark"] .reading-status {
+            background: rgba(109, 179, 242, 0.1);
+        }
+
+        /* Footer */
+        .book-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .book-footer::before {
+            content: '✦';
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--accent-color);
         }
         
-        @media (max-width: 768px) {
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
             .book-container {
-                padding: 30px 20px;
+                padding: 50px 60px;
+            }
+
+            .chapter-badge {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+
+            .toolbar {
+                height: 56px;
+                padding: 0 15px;
+            }
+
+            .book-wrapper {
+                padding: 10px;
+                margin-top: 56px;
+            }
+
+            .book-container {
+                padding: 35px 25px;
+                border-radius: 0;
+            }
+
+            .book-container::before {
+                width: 15px;
             }
             
             .book-title {
                 font-size: 2em;
             }
+
+            .book-header {
+                margin-bottom: 35px;
+            }
+
+            .book-header::after {
+                font-size: 20px;
+            }
+
+            .book-icon {
+                font-size: 36px;
+            }
+
+            .toc-title {
+                font-size: 1.2em;
+            }
+
+            .post-item {
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 0 8px 8px 0;
+            }
+
+            .post-title {
+                font-size: 1.25em;
+            }
+
+            .post-meta {
+                gap: 10px;
+            }
+
+            .chapter-badge {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+
+            .toolbar {
+                height: 52px;
+                padding: 0 12px;
+            }
+
+            .site-name span {
+                display: none;
+            }
+
+            .book-wrapper {
+                padding: 5px;
+                margin-top: 52px;
+            }
+
+            .book-container {
+                padding: 25px 18px;
+            }
+
+            .book-title {
+                font-size: 1.7em;
+            }
+
+            .book-description {
+                font-size: 1em;
+            }
+
+            .post-item {
+                padding: 18px 15px;
+                margin-bottom: 15px;
+            }
+
+            .post-title {
+                font-size: 1.15em;
+            }
+
+            .post-description {
+                font-size: 0.95em;
+            }
+        }
+        
+        @media print {
+            .toolbar {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: #000;
+            }
+
+            .book-wrapper {
+                margin-top: 0;
+                padding: 0;
+            }
+            
+            .book-container {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .book-container::before,
+            .book-container::after {
+                display: none;
+            }
+
+            .post-item {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Smooth transitions */
+        .book-container,
+        .toolbar,
+        .toolbar-btn,
+        .theme-dropdown,
+        .post-item {
+            transition: background-color 0.3s ease, 
+                        border-color 0.3s ease, 
+                        color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .toolbar-btn,
+            .theme-option,
+            .post-item {
+                min-height: 44px;
+            }
+
+            .post-link {
+                padding: 5px 0;
+            }
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="book-container">
-        <div class="book-header">
-            <h1 class="book-title">Prajna</h1>
-            <p class="book-description">A book rendered from Wisdom!</p>
+    <!-- Toolbar -->
+    <nav class="toolbar">
+        <div class="toolbar-left">
+            <div class="site-name">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>Prajna</span>
+            </div>
         </div>
-        <ul class="posts-list">
-                        <li class="post-item">
+        <div class="toolbar-right">
+            <!-- Theme Selector -->
+            <div class="theme-selector">
+                <button class="toolbar-btn" id="themeBtn" onclick="toggleThemeDropdown()" title="Change theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <div class="theme-dropdown" id="themeDropdown">
+                    <div class="theme-option" data-theme="light" onclick="setTheme('light')">
+                        <div class="theme-icon light"></div>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="night" onclick="setTheme('night')">
+                        <div class="theme-icon night"></div>
+                        <span>Night</span>
+                    </div>
+                    <div class="theme-option" data-theme="dark" onclick="setTheme('dark')">
+                        <div class="theme-icon dark"></div>
+                        <span>Dark</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="book-wrapper">
+        <div class="book-container">
+            <header class="book-header">
+                <span class="book-icon">📚</span>
+                <h1 class="book-title">Prajna</h1>
+                <p class="book-description">A book rendered from Wisdom!</p>
+            </header>
+            
+            <section>
+                <div class="toc-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    <h2 class="toc-title">Table of Contents</h2>
+                </div>
+                <ul class="posts-list">
+                                <li class="post-item">
                 <a href="chapter-1-the-beginning.html" class="post-link">
                     <h2 class="post-title">Shree Ganesh: The Auspicious Beginning</h2>
                     <div class="post-meta">
@@ -132,7 +785,86 @@
                     <p class="post-description">Looking ahead to what's possible</p>
                 </a>
             </li>
-        </ul>
+                </ul>
+            </section>
+
+            <footer class="book-footer">
+                <p>Prajna — A book rendered from Wisdom!</p>
+            </footer>
+        </div>
     </div>
+
+    <script>
+        // Theme Management
+        function getStoredTheme() {
+            return localStorage.getItem('prajna-theme') || 'light';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('prajna-theme', theme);
+            
+            // Update meta theme-color
+            const metaTheme = document.querySelector('meta[name="theme-color"]');
+            const themes = {
+                light: '#f5f5f0',
+                night: '#2c2416',
+                dark: '#0d0d0d'
+            };
+            if (metaTheme) metaTheme.setAttribute('content', themes[theme]);
+
+            // Update active state in dropdown
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.theme === theme);
+            });
+
+            closeThemeDropdown();
+        }
+
+        function toggleThemeDropdown() {
+            const dropdown = document.getElementById('themeDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function closeThemeDropdown() {
+            document.getElementById('themeDropdown').classList.remove('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.theme-selector')) {
+                closeThemeDropdown();
+            }
+        });
+
+        // Bookmarks - show indicators for bookmarked chapters
+        function getBookmarks() {
+            return JSON.parse(localStorage.getItem('prajna-bookmarks') || '[]');
+        }
+
+        function updateBookmarkIndicators() {
+            const bookmarks = getBookmarks();
+            document.querySelectorAll('.post-item').forEach(item => {
+                const link = item.querySelector('.post-link');
+                if (link) {
+                    const href = link.getAttribute('href');
+                    const indicator = item.querySelector('.bookmark-indicator');
+                    if (indicator) {
+                        const isBookmarked = bookmarks.some(b => b.endsWith(href));
+                        indicator.classList.toggle('show', isBookmarked);
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply stored theme
+            setTheme(getStoredTheme());
+            
+            // Update bookmark indicators
+            updateBookmarkIndicators();
+        });
+    </script>
 </body>
 </html>
