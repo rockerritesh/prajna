@@ -14,6 +14,7 @@ Prajna takes markdown files in Jekyll format from the `_posts` folder and conver
 - 📝 **Full markdown support** - Headers, lists, code blocks, tables, and more
 - 🔧 **Simple configuration** - Easy to customize via `_config.yml`
 - 🚀 **Fast rendering** - Quickly generates HTML from all your posts
+- 🗺️ **SEO-friendly** - Automatically generates sitemap.xml for search engines
 
 ## Installation
 
@@ -43,6 +44,11 @@ pip install -r requirements.txt
    ```
 
 3. View the generated HTML files in the `docs` folder
+
+The script will generate:
+- Individual HTML pages for each post
+- An `index.html` page listing all posts
+- A `sitemap.xml` file for search engine optimization
 
 ### Writing Posts
 
@@ -91,6 +97,8 @@ Edit `_config.yml` to customize settings:
 # Site settings
 title: Prajna
 description: A book rendered from Jekyll-format markdown
+url: https://yourdomain.com  # Important for sitemap.xml generation
+baseurl: ""                   # Optional base URL path
 
 # Build settings
 markdown: kramdown
@@ -101,6 +109,8 @@ book:
   posts_dir: _posts
   template_dir: _layouts
 ```
+
+**Note:** Set the `url` field in `_config.yml` for proper sitemap.xml generation. If not set, a placeholder URL will be used.
 
 ### Custom Templates
 
