@@ -272,9 +272,11 @@ class PrajnaRenderer:
             base_url = self.config.get('url', '').rstrip('/')
             baseurl = self.config.get('baseurl', '').rstrip('/')
             
-            # If no URL is configured, use a placeholder
+            # If no URL is configured, use a placeholder and warn user
             if not base_url:
                 base_url = 'https://example.com'
+                print(f"⚠ Warning: No 'url' configured in _config.yml. Using placeholder: {base_url}")
+                print(f"  Please set 'url' in _config.yml for proper sitemap generation.")
             
             full_base_url = base_url + baseurl
             
@@ -302,10 +304,15 @@ class PrajnaRenderer:
                 # Use post date if available, otherwise use current date
                 if post.get('date'):
                     try:
-                        # Try to parse the date string
-                        date_obj = datetime.strptime(post['date'], '%B %d, %Y')
-                        lastmod.text = date_obj.strftime('%Y-%m-%d')
-                    except (ValueError, TypeError):
+                        # Handle both string dates and date objects
+                        if isinstance(post['date'], str):
+                            # Try to parse the date string
+                            date_obj = datetime.strptime(post['date'], '%B %d, %Y')
+                            lastmod.text = date_obj.strftime('%Y-%m-%d')
+                        else:
+                            # Assume it's a date or datetime object
+                            lastmod.text = post['date'].strftime('%Y-%m-%d')
+                    except (ValueError, TypeError, AttributeError):
                         lastmod.text = datetime.now().strftime('%Y-%m-%d')
                 else:
                     lastmod.text = datetime.now().strftime('%Y-%m-%d')
@@ -316,7 +323,7 @@ class PrajnaRenderer:
             
             # Pretty print the XML
             xml_string = minidom.parseString(
-                tostring(urlset, encoding='utf-8')
+                tostring(urlset)
             ).toprettyxml(indent='  ', encoding='utf-8')
             
             # Write sitemap file
