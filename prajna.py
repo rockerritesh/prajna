@@ -10,6 +10,8 @@ import markdown
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from xml.etree.ElementTree import Element, SubElement, tostring
+from xml.dom import minidom
 
 
 class PrajnaRenderer:
@@ -206,6 +208,7 @@ class PrajnaRenderer:
         # Generate index page
         if posts_info:
             self._generate_index(posts_info)
+            self._generate_sitemap(posts_info)
         
         print(f"\n{success_count}/{len(post_files)} posts rendered successfully")
         print(f"Output directory: {self.output_dir}")
@@ -261,6 +264,77 @@ class PrajnaRenderer:
             
         except Exception as e:
             print(f"✗ Error generating index: {e}")
+    
+    def _generate_sitemap(self, posts_info: List[Dict]):
+        """Generate sitemap.xml for all pages"""
+        try:
+            # Get base URL from config
+            base_url = self.config.get('url', '').rstrip('/')
+            baseurl = self.config.get('baseurl', '').rstrip('/')
+            
+            # If no URL is configured, use a placeholder and warn user
+            if not base_url:
+                base_url = 'https://example.com'
+                print(f"⚠ Warning: No 'url' configured in _config.yml. Using placeholder: {base_url}")
+                print(f"  Please set 'url' in _config.yml for proper sitemap generation.")
+            
+            full_base_url = base_url + baseurl
+            
+            # Create root element
+            urlset = Element('urlset')
+            urlset.set('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
+            
+            # Add index page
+            url = SubElement(urlset, 'url')
+            loc = SubElement(url, 'loc')
+            loc.text = f"{full_base_url}/"
+            lastmod = SubElement(url, 'lastmod')
+            lastmod.text = datetime.now().strftime('%Y-%m-%d')
+            changefreq = SubElement(url, 'changefreq')
+            changefreq.text = 'weekly'
+            priority = SubElement(url, 'priority')
+            priority.text = '1.0'
+            
+            # Add all post pages
+            for post in posts_info:
+                url = SubElement(urlset, 'url')
+                loc = SubElement(url, 'loc')
+                loc.text = f"{full_base_url}/{post['filename']}"
+                lastmod = SubElement(url, 'lastmod')
+                # Use post date if available, otherwise use current date
+                if post.get('date'):
+                    try:
+                        # Handle both string dates and date objects
+                        if isinstance(post['date'], str):
+                            # Try to parse the date string
+                            date_obj = datetime.strptime(post['date'], '%B %d, %Y')
+                            lastmod.text = date_obj.strftime('%Y-%m-%d')
+                        else:
+                            # Assume it's a date or datetime object
+                            lastmod.text = post['date'].strftime('%Y-%m-%d')
+                    except (ValueError, TypeError, AttributeError):
+                        lastmod.text = datetime.now().strftime('%Y-%m-%d')
+                else:
+                    lastmod.text = datetime.now().strftime('%Y-%m-%d')
+                changefreq = SubElement(url, 'changefreq')
+                changefreq.text = 'monthly'
+                priority = SubElement(url, 'priority')
+                priority.text = '0.8'
+            
+            # Pretty print the XML
+            xml_string = minidom.parseString(
+                tostring(urlset, encoding='unicode')
+            ).toprettyxml(indent='  ', encoding='utf-8')
+            
+            # Write sitemap file
+            sitemap_path = self.output_dir / 'sitemap.xml'
+            with open(sitemap_path, 'wb') as f:
+                f.write(xml_string)
+            
+            print(f"✓ Generated: sitemap.xml")
+            
+        except Exception as e:
+            print(f"✗ Error generating sitemap: {e}")
 
 
 def main():
