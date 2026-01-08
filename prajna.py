@@ -323,7 +323,7 @@ class PrajnaRenderer:
             
             # Pretty print the XML
             xml_string = minidom.parseString(
-                tostring(urlset)
+                tostring(urlset, encoding='unicode')
             ).toprettyxml(indent='  ', encoding='utf-8')
             
             # Write sitemap file
