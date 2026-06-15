@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Energy Meter + AI — Final-Year Project Explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101418;
+    --panel:#171C22;
+    --panel-2:#1E242C;
+    --paper:#FFFFFF;
+    --ink:#E9EEF3;
+    --ink-dk:#11161B;
+    --muted:#93A1AD;
+    --muted-dk:#5B6B78;
+    --line:#28313A;
+    --line-lt:#E2E8EE;
+    /* categorical appliance palette */
+    --fridge:#12B886;
+    --light:#FAB005;
+    --tv:#7048E8;
+    --ac:#4263EB;
+    --kettle:#FA5252;
+    --accent:#34D399;
+    --maxw:1000px;
+    --r:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+  h1,h2,h3{font-family:"Sora",sans-serif;letter-spacing:-.02em}
+  p{margin:0 0 14px}
+  .muted{color:var(--muted)}
+  .divider{height:1px;background:var(--line);border:0;margin:0}
+
+  /* ---------- hero ---------- */
+  .hero{padding:62px 0 18px;position:relative;overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(900px 420px at 75% -10%, rgba(52,211,153,.14), transparent 60%);
+    pointer-events:none;
+  }
+  .hero h1{font-weight:700;font-size:clamp(2.1rem,6vw,3.7rem);line-height:1.03;margin:18px 0 16px;max-width:16ch}
+  .hero .lede{font-size:clamp(1.05rem,2.3vw,1.28rem);color:var(--muted);max-width:56ch;margin:0}
+  .chips{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:"JetBrains Mono",monospace;font-size:.74rem;padding:7px 13px;border:1px solid var(--line);border-radius:100px;background:var(--panel);color:var(--muted)}
+  .chip b{color:var(--accent);font-weight:600}
+
+  /* ---------- meter readout ---------- */
+  .readout{
+    margin-top:34px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:22px;display:grid;grid-template-columns:1.1fr 1.4fr;gap:22px;align-items:center;
+    box-shadow:0 30px 60px -36px rgba(0,0,0,.7);
+  }
+  .meter-num{border-right:1px solid var(--line);padding-right:22px}
+  .meter-num .lab{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted-dk);text-transform:uppercase}
+  .meter-num .big{font-family:"Sora",sans-serif;font-weight:700;font-size:clamp(2.6rem,7vw,4rem);line-height:1;margin:6px 0 2px}
+  .meter-num .big .u{font-size:1.4rem;color:var(--accent);font-weight:500}
+  .meter-num .sub{font-family:"JetBrains Mono",monospace;font-size:.74rem;color:var(--muted)}
+  .meter-vis svg{display:block;width:100%;height:auto}
+  .meter-cap{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--muted-dk);margin-top:8px}
+  @media(max-width:680px){
+    .readout{grid-template-columns:1fr}
+    .meter-num{border-right:0;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:18px}
+  }
+
+  /* ---------- sections ---------- */
+  section{padding:48px 0}
+  .sec-head{max-width:62ch}
+  h2{font-weight:600;font-size:clamp(1.5rem,3.6vw,2.15rem);line-height:1.12;margin:12px 0 14px}
+  h3{font-weight:600;font-size:1.05rem;margin:0 0 6px}
+
+  /* light section variant */
+  .light-sec{background:var(--paper);color:var(--ink-dk)}
+  .light-sec .muted{color:var(--muted-dk)}
+  .light-sec .eyebrow{color:#0CA678}
+
+  /* ---------- hardware cards ---------- */
+  .hw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
+  .hw{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+  .light-sec .hw{background:#F6F8FA;border-color:var(--line-lt)}
+  .hw .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:12px;background:rgba(52,211,153,.14)}
+  .light-sec .hw .ic{background:#E3F7EF}
+  .hw .ic svg{width:20px;height:20px;stroke:#0CA678;fill:none;stroke-width:1.8}
+  .hw h3{font-size:1rem}
+  .hw p{font-size:.9rem;margin:4px 0 0}
+  .hw .pill{display:inline-block;margin-top:10px;font-family:"JetBrains Mono",monospace;font-size:.68rem;padding:3px 8px;border-radius:6px;background:#E3F7EF;color:#087F5B}
+  .light-sec .hw p{color:var(--muted-dk)}
+  .safe{margin-top:18px;background:#E3F7EF;border:1px solid #A9E3CC;border-radius:12px;padding:14px 16px;color:#0B5D43;font-size:.92rem}
+  .safe b{color:#08402F}
+
+  /* ---------- disaggregation signature ---------- */
+  .disagg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;margin-top:22px}
+  .disagg svg{display:block;width:100%;height:auto}
+  .leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-family:"JetBrains Mono",monospace;font-size:.76rem}
+  .leg span{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+  .leg i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  .arrow-note{text-align:center;font-family:"JetBrains Mono",monospace;font-size:.74rem;color:var(--muted-dk);margin:14px 0 0}
+
+  /* ---------- architecture ---------- */
+  .diagram-scroll{overflow-x:auto;margin-top:22px;border:1px solid var(--line-lt);border-radius:var(--r);background:#FBFCFD}
+  .diagram-scroll svg{display:block;min-width:820px;width:100%;height:auto}
+
+  /* ---------- split bar ---------- */
+  .split{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;margin-top:22px}
+  .splitbar{display:flex;height:54px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .splitbar .hwseg{background:linear-gradient(180deg,#0CA678,#0B8F66);width:30%;display:grid;place-items:center;color:#022;font-family:"Sora";font-weight:600;font-size:.9rem}
+  .splitbar .swseg{background:linear-gradient(180deg,#4263EB,#3B5BDB);width:70%;display:grid;place-items:center;color:#fff;font-family:"Sora";font-weight:600;font-size:.9rem}
+  .split-cap{display:flex;justify-content:space-between;margin-top:10px;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--muted)}
+  .split-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+  .split-cols h3{font-size:.96rem}
+  .split-cols ul{margin:6px 0 0;padding-left:18px}
+  .split-cols li{font-size:.88rem;color:var(--muted);margin-bottom:4px}
+  @media(max-width:620px){.split-cols{grid-template-columns:1fr}}
+
+  /* ---------- reasons ---------- */
+  .reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:22px}
+  .reason{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+  .reason .num{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:var(--accent);font-weight:600}
+  .reason h3{margin-top:8px}
+  .reason p{font-size:.92rem;color:var(--muted);margin:0}
+
+  /* ---------- footer ---------- */
+  footer{padding:42px 0 64px;color:var(--muted);font-size:.85rem}
+  footer .mono{font-size:.74rem}
+
+  @media (prefers-reduced-motion:reduce){
+    .draw{stroke-dasharray:none !important;stroke-dashoffset:0 !important;animation:none !important}
+    .band{animation:none !important;opacity:1 !important}
+  }
+  .draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.4s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .band{opacity:0;animation:fade .7s ease forwards}
+  @keyframes fade{to{opacity:1}}
+  .b1{animation-delay:.2s}.b2{animation-delay:.5s}.b3{animation-delay:.8s}.b4{animation-delay:1.1s}.b5{animation-delay:1.4s}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Final-year project · Electrical engineering</span>
+    <h1>One sensor. The whole house, appliance by appliance.</h1>
+    <p class="lede">A single clip-on sensor watches the total power coming into a home. An AI model then untangles that one signal to tell you which appliances are running — no sensor on each device. Small hardware, big software.</p>
+    <div class="chips">
+      <span class="chip"><b>Hardware:</b> 1 clip-on sensor + ESP32</span>
+      <span class="chip"><b>Software:</b> AI disaggregation</span>
+      <span class="chip"><b>Data:</b> your device collects it</span>
+      <span class="chip"><b>Output:</b> a publishable paper</span>
+    </div>
+
+    <div class="readout" role="img" aria-label="Smart meter readout showing total household power being split into appliances">
+      <div class="meter-num">
+        <div class="lab">Total power · whole house</div>
+        <div class="big">1.34<span class="u"> kW</span></div>
+        <div class="sub">one number → many appliances</div>
+      </div>
+      <div class="meter-vis">
+        <svg viewBox="0 0 700 230" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <!-- baseline grid -->
+          <g stroke="#28313A" stroke-width="1">
+            <line x1="40" y1="200" x2="660" y2="200"/>
+            <line x1="40" y1="153" x2="660" y2="153" stroke-dasharray="3 6" opacity="0.5"/>
+            <line x1="40" y1="106" x2="660" y2="106" stroke-dasharray="3 6" opacity="0.5"/>
+            <line x1="40" y1="60" x2="660" y2="60" stroke-dasharray="3 6" opacity="0.5"/>
+          </g>
+          <!-- total line -->
+          <path class="draw" d="M 40.0,197.6 L 43.9,197.6 L 47.8,179.9 L 51.6,179.9 L 55.5,179.9 L 59.4,179.9 L 63.2,179.9 L 67.1,179.9 L 71.0,179.9 L 74.9,179.9 L 78.8,179.9 L 82.6,179.9 L 86.5,179.9 L 90.4,179.9 L 94.2,179.9 L 98.1,197.6 L 102.0,197.6 L 105.9,197.6 L 109.8,197.6 L 113.6,197.6 L 117.5,197.6 L 121.4,197.6 L 125.2,197.6 L 129.1,197.6 L 133.0,197.6 L 136.9,197.6 L 140.8,197.6 L 144.6,197.6 L 148.5,197.6 L 152.4,197.6 L 156.2,197.6 L 160.1,197.6 L 164.0,197.6 L 167.9,183.5 L 171.8,165.8 L 175.6,165.8 L 179.5,165.8 L 183.4,165.8 L 187.2,165.8 L 191.1,165.8 L 195.0,165.8 L 198.9,165.8 L 202.8,165.8 L 206.6,165.8 L 210.5,165.8 L 214.4,165.8 L 218.2,165.8 L 222.1,183.5 L 226.0,183.5 L 229.9,128.2 L 233.8,128.1 L 237.6,127.9 L 241.5,127.8 L 245.4,127.6 L 249.2,127.4 L 253.1,127.3 L 257.0,127.1 L 260.9,126.9 L 264.8,126.8 L 268.6,126.6 L 272.5,126.4 L 276.4,126.3 L 280.2,126.1 L 284.1,126.0 L 288.0,125.8 L 291.9,125.6 L 295.8,107.8 L 299.6,107.6 L 303.5,107.4 L 307.4,107.3 L 311.2,107.1 L 315.1,106.9 L 319.0,106.8 L 322.9,106.8 L 326.8,106.8 L 330.6,106.8 L 334.5,106.8 L 338.4,106.8 L 342.2,106.8 L 346.1,124.5 L 350.0,124.5 L 353.9,124.5 L 357.8,124.5 L 361.6,124.5 L 365.5,124.5 L 369.4,124.5 L 373.2,124.5 L 377.1,63.1 L 381.0,63.1 L 384.9,63.1 L 388.8,63.1 L 392.6,63.1 L 396.5,63.1 L 400.4,63.1 L 404.2,63.1 L 408.1,63.1 L 412.0,124.5 L 415.9,124.5 L 419.8,106.8 L 423.6,106.8 L 427.5,106.8 L 431.4,106.8 L 435.2,106.8 L 439.1,106.8 L 443.0,106.8 L 446.9,106.8 L 450.8,106.8 L 454.6,106.8 L 458.5,106.8 L 462.4,106.8 L 466.2,106.8 L 470.1,124.5 L 474.0,124.5 L 477.9,124.5 L 481.8,124.5 L 485.6,124.5 L 489.5,124.5 L 493.4,124.5 L 497.2,124.5 L 501.1,124.5 L 505.0,124.5 L 508.9,124.5 L 512.8,124.5 L 516.6,124.5 L 520.5,124.5 L 524.4,171.7 L 528.2,171.7 L 532.1,171.7 L 536.0,171.7 L 539.9,171.7 L 543.8,154.0 L 547.6,154.0 L 551.5,154.0 L 555.4,154.0 L 559.2,154.0 L 563.1,154.0 L 567.0,168.1 L 570.9,168.1 L 574.8,168.1 L 578.6,168.1 L 582.5,168.1 L 586.4,168.1 L 590.2,168.1 L 594.1,185.8 L 598.0,185.8 L 601.9,185.8 L 605.8,185.8 L 609.6,185.8 L 613.5,185.8 L 617.4,185.8 L 621.2,185.8 L 625.1,185.8 L 629.0,185.8 L 632.9,185.8 L 636.8,185.8 L 640.6,185.8 L 644.5,185.8 L 648.4,185.8 L 652.2,185.8 L 656.1,185.8 L 660.0,185.8"
+            fill="none" stroke="#34D399" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <div class="meter-cap">AGGREGATE LOAD · ONE WIRE · OVER TIME</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<hr class="divider">
+
+<!-- ===== 01 PROBLEM ===== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">01 — The everyday problem</span>
+      <h2>Your meter shows one number for everything</h2>
+      <p class="muted">A home electricity meter tells you the <em>total</em> being used right now — but not <em>what's</em> using it. Is the bill high because of the fridge, the water heater, or that old AC? Normally you'd have to put a sensor on every single appliance to find out. That's expensive and impractical.</p>
+      <p class="muted">This project takes the smarter route, called <b>Non-Intrusive Load Monitoring (NILM)</b>: measure only the one main wire, then let software figure out the breakdown. The hardware stays tiny; the intelligence lives in the model.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ===== 02 HARDWARE (light section) ===== -->
+<section class="light-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">02 — The hardware (kept small &amp; safe)</span>
+      <h2>A clip-on sensor and a tiny board</h2>
+      <p class="muted">This is the entire hardware contribution — cheap, available in Kathmandu, and built to be safe. It's a real, demonstrable device, but it isn't where your time goes.</p>
+    </div>
+
+    <div class="hw-grid">
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 4v8a5 5 0 0 0 10 0V4"/><circle cx="12" cy="18" r="3"/></svg></div>
+        <h3>Current clamp (SCT-013)</h3>
+        <p>Snaps <em>around</em> the wire — never touches live metal. Reads how much current is flowing.</p>
+        <span class="pill">non-contact · safe</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+        <h3>ESP32 micro-board</h3>
+        <p>Reads the sensor many times a second and sends the numbers out over Wi-Fi. Built-in wireless, very cheap.</p>
+        <span class="pill">samples + uploads</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4z"/><path d="M8 7V4h8v3"/></svg></div>
+        <h3>Voltage sensor (optional)</h3>
+        <p>A ZMPT101B module if you want true power (watts) and not just current. Add only if your scope needs it.</p>
+        <span class="pill">optional add-on</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M5 10a7 7 0 1 0 14 0"/></svg></div>
+        <h3>Logging</h3>
+        <p>Readings stream to a laptop or a small file. That stored stream becomes your real, labeled dataset.</p>
+        <span class="pill">your own data</span>
+      </div>
+    </div>
+
+    <div class="safe"><b>Safety note:</b> the current clamp is the key choice — because it clips around insulated wire instead of breaking into the circuit, you avoid direct mains contact, which is what makes this one of the safest meaningful hardware builds for a student project.</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ===== 03 SIGNATURE: disaggregation ===== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">03 — The core idea</span>
+      <h2>Splitting one signal back into appliances</h2>
+      <p class="muted">Every appliance leaves a "fingerprint" in the total power: a fridge cycles on and off, a kettle is a short tall spike, an AC is a long heavy block. The model learns these fingerprints and pulls the single line apart into who's-using-what — this is the heart of the project.</p>
+    </div>
+
+    <div class="disagg">
+      <svg viewBox="0 0 700 220" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Stacked area chart showing the total household load split into fridge, lighting, TV, AC and kettle">
+        <g stroke="#28313A" stroke-width="1">
+          <line x1="40" y1="200" x2="660" y2="200"/>
+        </g>
+        <path class="band b1" fill="#12B886" fill-opacity="0.9" stroke="#0B8F66" stroke-width="0.6" d="M 40.0,200.0 L 43.9,200.0 L 47.8,200.0 L 51.6,200.0 L 55.5,200.0 L 59.4,200.0 L 63.2,200.0 L 67.1,200.0 L 71.0,200.0 L 74.9,200.0 L 78.8,200.0 L 82.6,200.0 L 86.5,200.0 L 90.4,200.0 L 94.2,200.0 L 98.1,200.0 L 102.0,200.0 L 105.9,200.0 L 109.8,200.0 L 113.6,200.0 L 117.5,200.0 L 121.4,200.0 L 125.2,200.0 L 129.1,200.0 L 133.0,200.0 L 136.9,200.0 L 140.8,200.0 L 144.6,200.0 L 148.5,200.0 L 152.4,200.0 L 156.2,200.0 L 160.1,200.0 L 164.0,200.0 L 167.9,200.0 L 171.8,200.0 L 175.6,200.0 L 179.5,200.0 L 183.4,200.0 L 187.2,200.0 L 191.1,200.0 L 195.0,200.0 L 198.9,200.0 L 202.8,200.0 L 206.6,200.0 L 210.5,200.0 L 214.4,200.0 L 218.2,200.0 L 222.1,200.0 L 226.0,200.0 L 229.9,200.0 L 233.8,200.0 L 237.6,200.0 L 241.5,200.0 L 245.4,200.0 L 249.2,200.0 L 253.1,200.0 L 257.0,200.0 L 260.9,200.0 L 264.8,200.0 L 268.6,200.0 L 272.5,200.0 L 276.4,200.0 L 280.2,200.0 L 284.1,200.0 L 288.0,200.0 L 291.9,200.0 L 295.8,200.0 L 299.6,200.0 L 303.5,200.0 L 307.4,200.0 L 311.2,200.0 L 315.1,200.0 L 319.0,200.0 L 322.9,200.0 L 326.8,200.0 L 330.6,200.0 L 334.5,200.0 L 338.4,200.0 L 342.2,200.0 L 346.1,200.0 L 350.0,200.0 L 353.9,200.0 L 357.8,200.0 L 361.6,200.0 L 365.5,200.0 L 369.4,200.0 L 373.2,200.0 L 377.1,200.0 L 381.0,200.0 L 384.9,200.0 L 388.8,200.0 L 392.6,200.0 L 396.5,200.0 L 400.4,200.0 L 404.2,200.0 L 408.1,200.0 L 412.0,200.0 L 415.9,200.0 L 419.8,200.0 L 423.6,200.0 L 427.5,200.0 L 431.4,200.0 L 435.2,200.0 L 439.1,200.0 L 443.0,200.0 L 446.9,200.0 L 450.8,200.0 L 454.6,200.0 L 458.5,200.0 L 462.4,200.0 L 466.2,200.0 L 470.1,200.0 L 474.0,200.0 L 477.9,200.0 L 481.8,200.0 L 485.6,200.0 L 489.5,200.0 L 493.4,200.0 L 497.2,200.0 L 501.1,200.0 L 505.0,200.0 L 508.9,200.0 L 512.8,200.0 L 516.6,200.0 L 520.5,200.0 L 524.4,200.0 L 528.2,200.0 L 532.1,200.0 L 536.0,200.0 L 539.9,200.0 L 543.8,200.0 L 547.6,200.0 L 551.5,200.0 L 555.4,200.0 L 559.2,200.0 L 563.1,200.0 L 567.0,200.0 L 570.9,200.0 L 574.8,200.0 L 578.6,200.0 L 582.5,200.0 L 586.4,200.0 L 590.2,200.0 L 594.1,200.0 L 598.0,200.0 L 601.9,200.0 L 605.8,200.0 L 609.6,200.0 L 613.5,200.0 L 617.4,200.0 L 621.2,200.0 L 625.1,200.0 L 629.0,200.0 L 632.9,200.0 L 636.8,200.0 L 640.6,200.0 L 644.5,200.0 L 648.4,200.0 L 652.2,200.0 L 656.1,200.0 L 660.0,200.0 L 660.0,197.6 L 590.2,179.9 L 547.6,179.9 L 539.9,197.6 L 470.1,197.6 L 466.2,179.9 L 419.8,179.9 L 415.9,197.6 L 346.1,197.6 L 342.2,179.9 L 295.8,179.9 L 291.9,197.6 L 222.1,197.6 L 218.2,179.9 L 171.8,179.9 L 167.9,197.6 L 94.2,179.9 L 43.9,197.6 L 40.0,197.6 Z"/>
+        <path class="band b2" fill="#FAB005" fill-opacity="0.92" d="M 40.0,197.6 L 47.8,179.9 L 94.2,179.9 L 98.1,197.6 L 167.9,197.6 L 171.8,179.9 L 218.2,179.9 L 222.1,197.6 L 229.9,189.6 L 291.9,187.0 L 295.8,169.1 L 319.0,168.1 L 342.2,168.1 L 346.1,185.8 L 415.9,185.8 L 419.8,168.1 L 466.2,168.1 L 470.1,185.8 L 539.9,185.8 L 543.8,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8 L 660.0,185.8 L 590.2,168.1 L 543.8,168.1 L 539.9,185.8 L 470.1,185.8 L 466.2,168.1 L 419.8,168.1 L 415.9,185.8 L 346.1,185.8 L 342.2,168.1 L 319.0,168.1 L 295.8,169.1 L 291.9,187.0 L 229.9,189.6 L 222.1,197.6 L 218.2,179.9 L 171.8,179.9 L 167.9,197.6 L 98.1,197.6 L 94.2,179.9 L 47.8,179.9 L 43.9,197.6 Z"/>
+        <path class="band b3" fill="#7048E8" fill-opacity="0.92" d="M 167.9,197.6 L 171.8,165.8 L 218.2,165.8 L 222.1,183.5 L 229.9,175.4 L 291.9,172.8 L 295.8,155.0 L 319.0,154.0 L 342.2,154.0 L 346.1,171.7 L 415.9,171.7 L 419.8,154.0 L 466.2,154.0 L 470.1,171.7 L 539.9,171.7 L 543.8,154.0 L 563.1,154.0 L 567.0,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8 L 660.0,185.8 L 590.2,168.1 L 567.0,168.1 L 563.1,154.0 L 543.8,154.0 L 539.9,171.7 L 470.1,171.7 L 466.2,154.0 L 419.8,154.0 L 415.9,171.7 L 346.1,171.7 L 342.2,154.0 L 319.0,154.0 L 295.8,155.0 L 291.9,172.8 L 229.9,175.4 L 222.1,183.5 L 218.2,165.8 L 171.8,165.8 L 167.9,183.5 Z"/>
+        <path class="band b4" fill="#4263EB" fill-opacity="0.92" d="M 167.9,183.5 L 171.8,165.8 L 218.2,165.8 L 222.1,183.5 L 229.9,128.2 L 291.9,125.6 L 295.8,107.8 L 319.0,106.8 L 342.2,106.8 L 346.1,124.5 L 415.9,124.5 L 419.8,106.8 L 466.2,106.8 L 470.1,124.5 L 520.5,124.5 L 524.4,171.7 L 539.9,171.7 L 543.8,154.0 L 563.1,154.0 L 567.0,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8 L 660.0,185.8 L 590.2,168.1 L 567.0,168.1 L 563.1,154.0 L 543.8,154.0 L 539.9,171.7 L 524.4,171.7 L 520.5,124.5 L 466.2,106.8 L 419.8,106.8 L 415.9,124.5 L 346.1,124.5 L 342.2,106.8 L 319.0,106.8 L 295.8,107.8 L 291.9,125.6 L 229.9,128.2 L 222.1,183.5 L 218.2,165.8 L 171.8,165.8 Z"/>
+        <path class="band b5" fill="#FA5252" fill-opacity="0.94" d="M 373.2,124.5 L 377.1,63.1 L 408.1,63.1 L 412.0,124.5 L 373.2,124.5 Z"/>
+        <!-- total outline -->
+        <path d="M 40.0,197.6 L 47.8,179.9 L 94.2,179.9 L 98.1,197.6 L 167.9,197.6 L 167.9,183.5 L 171.8,165.8 L 222.1,165.8 L 222.1,183.5 L 229.9,128.2 L 291.9,125.6 L 295.8,107.8 L 342.2,106.8 L 346.1,124.5 L 373.2,124.5 L 377.1,63.1 L 408.1,63.1 L 412.0,124.5 L 419.8,106.8 L 466.2,106.8 L 470.1,124.5 L 520.5,124.5 L 524.4,171.7 L 539.9,171.7 L 543.8,154.0 L 563.1,154.0 L 567.0,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8"
+          fill="none" stroke="#E9EEF3" stroke-width="1.6" stroke-opacity="0.55" stroke-linejoin="round"/>
+      </svg>
+      <div class="leg">
+        <span><i style="background:var(--fridge)"></i>Fridge (cycles)</span>
+        <span><i style="background:var(--light)"></i>Lighting</span>
+        <span><i style="background:var(--tv)"></i>TV / electronics</span>
+        <span><i style="background:var(--ac)"></i>Air conditioner</span>
+        <span><i style="background:var(--kettle)"></i>Kettle (spike)</span>
+      </div>
+      <p class="arrow-note">↑ The model turns the single green line from the meter into this colored breakdown.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ===== 04 ARCHITECTURE (light) ===== -->
+<section class="light-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">04 — How it works, end to end</span>
+      <h2>From the wire to the answer</h2>
+      <p class="muted">The left block is the small hardware. Everything to the right of the dashed line is software — where most of your work and all of the novelty lives.</p>
+    </div>
+
+    <div class="diagram-scroll">
+      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <defs>
+          <marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#3B5BDB"/>
+          </marker>
+          <style>
+            .b{fill:#FFFFFF;stroke-width:1.5;rx:12}
+            .hw{stroke:#0CA678}
+            .hwfill{fill:#E3F7EF;stroke:#0CA678}
+            .sw{stroke:#4263EB}
+            .swfill{fill:#EAEFFE;stroke:#4263EB}
+            .out{fill:#FFF4E6;stroke:#F76707}
+            .t{fill:#11161B;font-size:13.5px;font-weight:600;font-family:"Sora",sans-serif}
+            .s{fill:#5B6B78;font-size:10.5px}
+            .zone{font-size:11px;font-weight:600;letter-spacing:.14em}
+            .flow{stroke:#3B5BDB;stroke-width:2;fill:none;marker-end:url(#ar)}
+          </style>
+        </defs>
+
+        <!-- zone labels -->
+        <text class="zone" x="40" y="34" fill="#0CA678">▸ HARDWARE (≈30%)</text>
+        <text class="zone" x="360" y="34" fill="#4263EB">▸ SOFTWARE · AI / ML (≈70%)</text>
+        <line x1="330" y1="50" x2="330" y2="430" stroke="#C7CFD8" stroke-width="1.5" stroke-dasharray="5 6"/>
+
+        <!-- HARDWARE column -->
+        <rect class="b hwfill" x="40" y="70" width="240" height="78" rx="12"/>
+        <text class="t" x="58" y="100">1 · Clip-on current sensor</text>
+        <text class="s" x="58" y="120">SCT-013 clamps the main wire,</text>
+        <text class="s" x="58" y="135">reads current (non-contact).</text>
+
+        <rect class="b hwfill" x="40" y="178" width="240" height="78" rx="12"/>
+        <text class="t" x="58" y="208">2 · ESP32 board</text>
+        <text class="s" x="58" y="228">Samples fast, packages the</text>
+        <text class="s" x="58" y="243">numbers, sends over Wi-Fi.</text>
+
+        <rect class="b hwfill" x="40" y="286" width="240" height="78" rx="12"/>
+        <text class="t" x="58" y="316">3 · Log the stream</text>
+        <text class="s" x="58" y="336">Stored readings = your own</text>
+        <text class="s" x="58" y="351">real, labeled dataset.</text>
+
+        <path class="flow" d="M160,148 L160,176" stroke="#0CA678" marker-end="url(#ar)"/>
+        <path class="flow" d="M160,256 L160,284" stroke="#0CA678" marker-end="url(#ar)"/>
+        <!-- cross to software -->
+        <path class="flow" d="M280,325 L312,325 L312,150 L356,150"/>
+
+        <!-- SOFTWARE column -->
+        <rect class="b swfill" x="356" y="112" width="250" height="76" rx="12"/>
+        <text class="t" x="374" y="140">4 · Clean &amp; window</text>
+        <text class="s" x="374" y="160">Slice the stream into chunks,</text>
+        <text class="s" x="374" y="175">smooth out spikes &amp; gaps.</text>
+
+        <rect class="b swfill" x="356" y="210" width="250" height="76" rx="12"/>
+        <text class="t" x="374" y="238">5 · Features (or raw)</text>
+        <text class="s" x="374" y="258">Power, on/off edges, harmonics</text>
+        <text class="s" x="374" y="273">— or feed raw chunks to a net.</text>
+
+        <rect class="b swfill" x="356" y="308" width="250" height="86" rx="12"/>
+        <text class="t" x="374" y="336">6 · The ML model</text>
+        <text class="s" x="374" y="356">CNN / LSTM learns each</text>
+        <text class="s" x="374" y="371">appliance's fingerprint and</text>
+        <text class="s" x="374" y="386">disaggregates the signal.</text>
+
+        <path class="flow" d="M481,188 L481,208"/>
+        <path class="flow" d="M481,286 L481,306"/>
+        <path class="flow" d="M606,351 L640,351 L640,150 L662,150"/>
+        <path class="flow" d="M606,351 L640,351 L640,250 L662,250"/>
+
+        <!-- OUTPUTS -->
+        <rect class="b out" x="662" y="112" width="240" height="76" rx="12"/>
+        <text class="t" x="680" y="140" fill="#D9480F">Output A · Who's on</text>
+        <text class="s" x="680" y="160">"Fridge + AC running now."</text>
+        <text class="s" x="680" y="175">Appliance recognition.</text>
+
+        <rect class="b out" x="662" y="212" width="240" height="76" rx="12"/>
+        <text class="t" x="680" y="240" fill="#D9480F">Output B · What's next</text>
+        <text class="s" x="680" y="260">Forecast the coming load /</text>
+        <text class="s" x="680" y="275">flag unusual usage.</text>
+
+        <!-- EVALUATE -->
+        <rect class="b" x="662" y="312" width="240" height="92" rx="12" stroke="#5B6B78"/>
+        <text class="t" x="680" y="340">7 · Evaluate</text>
+        <text class="s" x="680" y="360">Accuracy, F1, error vs known</text>
+        <text class="s" x="680" y="375">labels. Compare models — this</text>
+        <text class="s" x="680" y="390">comparison is your paper.</text>
+
+        <path class="flow" d="M782,188 L782,210"/>
+        <path class="flow" d="M782,288 L782,310"/>
+      </svg>
+    </div>
+
+    <div style="margin-top:18px;background:#F6F8FA;border:1px solid var(--line-lt);border-radius:12px;padding:18px">
+      <h3 style="margin-bottom:6px">Tools you'd use</h3>
+      <p class="muted" style="margin:0">Hardware: <span class="mono">SCT-013 clamp</span>, <span class="mono">ESP32</span>, jumper wires, a burden resistor. Software: <span class="mono">Python</span>, <span class="mono">pandas/NumPy</span> for the data, <span class="mono">scikit-learn</span> for classic models, <span class="mono">PyTorch / TensorFlow</span> for the CNN/LSTM. Public datasets <span class="mono">UK-DALE · REDD · AMPds</span> to boost training.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ===== 05 SPLIT ===== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">05 — The balance you asked for</span>
+      <h2>Has both parts — and tilts to software</h2>
+      <p class="muted">It satisfies a "hardware + software" requirement with a genuine working device, while keeping your effort and the project's originality on the AI/ML side.</p>
+    </div>
+    <div class="split">
+      <div class="splitbar">
+        <div class="hwseg">HARDWARE</div>
+        <div class="swseg">SOFTWARE · AI / ML</div>
+      </div>
+      <div class="split-cap"><span>≈ 30% — build &amp; collect</span><span>≈ 70% — model &amp; analysis →</span></div>
+      <div class="split-cols">
+        <div>
+          <h3 style="color:#0CA678">Hardware (small)</h3>
+          <ul>
+            <li>Assemble clamp + ESP32</li>
+            <li>Calibrate &amp; log readings</li>
+            <li>Run controlled on/off sessions to label data</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color:#4263EB">Software (the bulk)</h3>
+          <ul>
+            <li>Preprocess &amp; window the signal</li>
+            <li>Design + train CNN/LSTM models</li>
+            <li>Disaggregate, forecast, evaluate, compare</li>
+            <li>Write the paper around the results</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ===== 06 WHY ===== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">06 — Why it's a smart pick</span>
+      <h2>Low risk, real device, clear paper</h2>
+    </div>
+    <div class="reasons">
+      <div class="reason">
+        <span class="num">// 01</span>
+        <h3>The device makes your data</h3>
+        <p>No begging a utility for records. You switch appliances on and off, and the rig produces real, labeled data — and public datasets fill any gaps.</p>
+      </div>
+      <div class="reason">
+        <span class="num">// 02</span>
+        <h3>Safe, cheap, available</h3>
+        <p>A non-contact clamp and an ESP32 are inexpensive, sold locally, and well-documented — so the hardware won't derail your timeline.</p>
+      </div>
+      <div class="reason">
+        <span class="num">// 03</span>
+        <h3>A paper sits inside it</h3>
+        <p>Appliance recognition accuracy, load forecasting, or anomaly detection — each is a recognized NILM theme that fits a student conference.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0 0 6px"><b>Smart Energy Meter with AI-based Appliance Recognition (NILM)</b> — a hardware-plus-software final-year project weighted toward AI/ML.</p>
+    <p class="mono" style="margin:0">Suggested next step: a full IOE-format proposal — objectives, scope, hardware block, ML methodology, data plan, timeline, expected outcomes.</p>
+  </div>
+</footer>
+
+</body>
+</html>
