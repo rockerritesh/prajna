@@ -459,6 +459,238 @@
 
 <hr class="divider">
 
+<!-- ===== 07 HARDWARE IN DETAIL (light) ===== -->
+<section class="light-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">07 — Hardware in detail</span>
+      <h2>Exact parts, and how they wire together</h2>
+      <p class="muted">Everything below is cheap, sold in Kathmandu electronics shops, and beginner-friendly. The core build is just three things: the clamp, a small bias circuit, and the ESP32. The voltage sensor and SD card are optional add-ons.</p>
+    </div>
+
+    <div class="hw-grid">
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 10 0V4"/><circle cx="12" cy="17" r="3"/></svg></div>
+        <h3>SCT-013-030 current clamp</h3>
+        <p>Clips around one insulated wire and outputs a small AC voltage (0–1 V). Core sensor.</p>
+        <span class="pill">qty 1 · core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+        <h3>ESP32 DevKit board</h3>
+        <p>Reads the sensor on its ADC pins and logs over USB or Wi-Fi. The brain of the rig.</p>
+        <span class="pill">qty 1 · core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h3l2-5 4 10 2-5h3"/></svg></div>
+        <h3>2 × 10 kΩ resistors</h3>
+        <p>Form a divider that lifts the sensor signal to mid-voltage so the ADC can read it.</p>
+        <span class="pill">qty 2 · core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M10 4v16M14 4v16M3 12h7M14 12h7"/></svg></div>
+        <h3>10 µF capacitor</h3>
+        <p>Steadies that mid-voltage reference point so the readings stay clean.</p>
+        <span class="pill">qty 1 · core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></div>
+        <h3>Breadboard + jumper wires</h3>
+        <p>Holds the bias circuit and connects everything without soldering.</p>
+        <span class="pill">qty 1 set · core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4z"/><path d="M8 7V4h8v3"/></svg></div>
+        <h3>ZMPT101B voltage module</h3>
+        <p>Add only if you want true power in watts (not just current). Has its own bias + trimmer.</p>
+        <span class="pill">optional</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5"/></svg></div>
+        <h3>microSD card module</h3>
+        <p>For logging offline to a card instead of streaming to a laptop. Connects over SPI.</p>
+        <span class="pill">optional</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v14M12 17a3 3 0 0 0 3-3V9M9 7l3-4 3 4"/></svg></div>
+        <h3>USB cable / 5 V supply</h3>
+        <p>Powers the ESP32 and carries the data stream to your computer.</p>
+        <span class="pill">qty 1 · core</span>
+      </div>
+    </div>
+
+    <h3 style="margin-top:30px">Wiring diagram</h3>
+    <div class="diagram-scroll">
+      <svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <defs>
+          <marker id="kar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#F76707"/>
+          </marker>
+          <style>
+            .kbx{fill:#FFFFFF;stroke:#CBD5DF;stroke-width:1.5}
+            .kchip{fill:#EAEFFE;stroke:#4263EB;stroke-width:2}
+            .kam{fill:#FFF4E6;stroke:#F76707;stroke-width:1.5}
+            .kopt{fill:#F6F8FA;stroke:#9AA7B2;stroke-width:1.5;stroke-dasharray:6 5}
+            .ktt{fill:#11161B;font-size:13px;font-weight:600;font-family:"Sora",sans-serif}
+            .kss{fill:#5B6B78;font-size:10.5px}
+            .kpin{fill:#11161B;font-size:10.5px;font-weight:600}
+            .ksig{stroke:#F76707;stroke-width:2.2;fill:none;marker-end:url(#kar)}
+            .kpwr{stroke:#9AA7B2;stroke-width:1.5;fill:none;stroke-dasharray:4 4}
+            .knode{fill:#F76707}
+            .kzone{font-size:11px;font-weight:600;letter-spacing:.12em}
+          </style>
+        </defs>
+
+        <!-- mains wire + clamp -->
+        <text class="kzone" x="24" y="40" fill="#F76707">▸ MAINS</text>
+        <rect x="40" y="56" width="13" height="250" rx="3" fill="#AEB6BD"/>
+        <text class="kss" x="20" y="324">live wire</text>
+        <circle cx="46" cy="150" r="24" fill="none" stroke="#F76707" stroke-width="6"/>
+        <rect x="14" y="140" width="20" height="20" rx="3" class="kam"/>
+        <text class="kpin" x="70" y="150">SCT-013-030</text>
+        <text class="kss" x="70" y="166">clips around wire</text>
+
+        <!-- clamp -> bias -->
+        <path class="ksig" d="M70,150 C120,150 130,250 168,250"/>
+        <text class="kss" x="92" y="205">AC out</text>
+
+        <!-- bias network -->
+        <rect class="kbx" x="170" y="206" width="190" height="92" rx="12"/>
+        <text class="ktt" x="188" y="232">Bias network</text>
+        <text class="kss" x="188" y="252">2 × 10 kΩ + 10 µF</text>
+        <text class="kss" x="188" y="268">centres signal</text>
+        <text class="kss" x="188" y="284">at ≈ 1.65 V</text>
+
+        <!-- bias -> ESP32 GPIO34 -->
+        <path class="ksig" d="M360,240 C420,240 430,210 470,210"/>
+
+        <!-- ESP32 -->
+        <rect class="kchip" x="470" y="150" width="220" height="240" rx="14"/>
+        <text class="ktt" x="492" y="180">ESP32 DevKit</text>
+        <text class="kss" x="492" y="198">samples ADC + Wi-Fi</text>
+        <!-- pin rows -->
+        <circle class="knode" cx="474" cy="210" r="3"/><text class="kpin" x="500" y="214">GPIO34  ← current signal</text>
+        <circle class="knode" cx="474" cy="260" r="3"/><text class="kpin" x="500" y="264">GPIO35  ← voltage (optional)</text>
+        <circle cx="474" cy="300" r="3" fill="#9AA7B2"/><text class="kpin" x="500" y="304" fill="#5B6B78">3V3 / GND → sensors</text>
+        <circle cx="474" cy="340" r="3" fill="#4263EB"/><text class="kpin" x="500" y="344" fill="#3B5BDB">USB / Wi-Fi → computer</text>
+        <text class="kss" x="500" y="372">SD (opt): CS5 · SCK18 · MOSI23 · MISO19</text>
+
+        <!-- ZMPT optional -->
+        <rect class="kopt" x="170" y="356" width="190" height="92" rx="12"/>
+        <text class="ktt" x="188" y="382">ZMPT101B</text>
+        <text class="kss" x="188" y="400">optional · true watts</text>
+        <text class="kss" x="188" y="416">measures mains voltage</text>
+        <text class="kss" x="188" y="432">OUT → GPIO35</text>
+        <path class="ksig" d="M360,402 C415,402 430,260 470,260"/>
+
+        <!-- power rails from ESP32 to sensors -->
+        <path class="kpwr" d="M470,300 C430,300 420,272 362,272"/>
+        <path class="kpwr" d="M470,310 C430,330 420,420 362,420"/>
+        <text class="kss" x="392" y="318" fill="#9AA7B2">3V3 / GND</text>
+
+        <!-- laptop -->
+        <rect class="kbx" x="760" y="190" width="210" height="92" rx="12"/>
+        <text class="ktt" x="780" y="218">Laptop / PC</text>
+        <text class="kss" x="780" y="238">logs readings as CSV</text>
+        <text class="kss" x="780" y="254">(USB serial or Wi-Fi)</text>
+        <path class="ksig" d="M690,300 C720,300 728,236 758,236" marker-end="url(#kar)" stroke="#4263EB"/>
+
+        <!-- SD optional -->
+        <rect class="kopt" x="760" y="318" width="210" height="78" rx="12"/>
+        <text class="ktt" x="780" y="344">microSD module</text>
+        <text class="kss" x="780" y="362">optional offline logging</text>
+        <text class="kss" x="780" y="378">SPI · 4 data pins + power</text>
+        <path class="kpwr" d="M690,360 C720,360 730,356 758,356"/>
+
+        <!-- legend -->
+        <g transform="translate(40,490)">
+          <line x1="0" y1="0" x2="34" y2="0" class="ksig"/><text class="kss" x="42" y="4">signal wire</text>
+          <line x1="170" y1="0" x2="204" y2="0" class="kpwr"/><text class="kss" x="212" y="4">power (3V3 / GND)</text>
+          <rect x="360" y="-9" width="18" height="18" rx="4" class="kopt"/><text class="kss" x="386" y="4">optional part</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="split" style="margin-top:18px">
+      <h3 style="font-size:1rem;margin-bottom:10px">Connection list (the core build)</h3>
+      <div class="split-cols">
+        <div>
+          <h3 style="color:#F76707;font-size:.92rem">Current sensing</h3>
+          <ul>
+            <li>3V3 → 10 kΩ → mid-point → 10 kΩ → GND</li>
+            <li>10 µF capacitor across mid-point and GND</li>
+            <li>Clamp lead 1 → mid-point (bias)</li>
+            <li>Clamp lead 2 → ESP32 GPIO34 (ADC)</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color:#4263EB;font-size:.92rem">Voltage (optional) &amp; power</h3>
+          <ul>
+            <li>ZMPT101B: VCC → 3V3, GND → GND</li>
+            <li>ZMPT101B: OUT → ESP32 GPIO35 (ADC)</li>
+            <li>ESP32: powered &amp; read over USB to laptop</li>
+            <li>microSD (optional): CS 5, SCK 18, MOSI 23, MISO 19</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="safe"><b>Before you wire it:</b> the clamp signal must be biased to mid-rail (the 2×10 kΩ + capacitor) or the ESP32's ADC can't read the negative half of the wave. Calibrate the readings against a known load (e.g. a labelled bulb), and set anything near mains up <b>with your supervisor's guidance</b>. The ESP32 ADC is non-linear at the extremes, so keep the signal comfortably within 0–3.3 V.</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ===== 08 REFERENCES ===== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">08 — What to read</span>
+      <h2>References to get you started</h2>
+      <p class="muted">A short, high-value reading list. Start with Hart's foundational paper and the NILMTK toolkit, then move to the deep-learning methods and pick a dataset. Find the newest survey through your library or Google Scholar to cite current work.</p>
+    </div>
+    <div class="reasons">
+      <div class="reason">
+        <span class="num">// foundations</span>
+        <h3>Start here</h3>
+        <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
+          <li>G. W. Hart, "Nonintrusive Appliance Load Monitoring," <i>Proc. IEEE</i>, 1992 — the paper that defined NILM.</li>
+          <li>A recent NILM review (search "non-intrusive load monitoring deep learning review", 2020+) for the current landscape.</li>
+        </ul>
+      </div>
+      <div class="reason">
+        <span class="num">// methods</span>
+        <h3>Deep-learning NILM</h3>
+        <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
+          <li>Kelly &amp; Knottenbelt, "Neural NILM," <i>ACM BuildSys</i>, 2015.</li>
+          <li>Zhang et al., "Sequence-to-Point Learning for Non-Intrusive Load Monitoring," <i>AAAI</i>, 2018.</li>
+        </ul>
+      </div>
+      <div class="reason">
+        <span class="num">// data</span>
+        <h3>Public datasets</h3>
+        <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
+          <li>Kolter &amp; Johnson, "REDD," <i>SustKDD</i>, 2011.</li>
+          <li>Kelly &amp; Knottenbelt, "UK-DALE," <i>Scientific Data</i>, 2015.</li>
+          <li>Makonin et al., "AMPds2," 2016.</li>
+        </ul>
+      </div>
+      <div class="reason">
+        <span class="num">// hands-on</span>
+        <h3>Tools &amp; hardware</h3>
+        <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
+          <li>Batra et al., "NILMTK: An Open Source Toolkit," <i>ACM e-Energy</i>, 2014 — code: github.com/nilmtk/nilmtk.</li>
+          <li>OpenEnergyMonitor docs (openenergymonitor.org) — CT-sensor + ESP32/Arduino measurement and calibration (emonlib).</li>
+          <li>Espressif ESP32 ADC guide — how to sample the analog signal reliably.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted" style="font-size:.84rem;margin-top:16px">Citations are starting points — confirm exact details and find the latest sources through your campus library or Google Scholar before citing in your report.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
 <footer>
   <div class="wrap">
     <p style="margin:0 0 6px"><b>Smart Energy Meter with AI-based Appliance Recognition (NILM)</b> — a hardware-plus-software final-year project weighted toward AI/ML.</p>
