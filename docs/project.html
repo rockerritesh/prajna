@@ -3,185 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Energy Meter + AI — Final-Year Project Explainer</title>
+<title>Motor Fault Detection Rig + AI — Final-Year Project Explainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#101418;
-    --panel:#171C22;
-    --panel-2:#1E242C;
+    --bg:#12151A;
+    --panel:#1A1F26;
+    --panel-2:#222a33;
     --paper:#FFFFFF;
-    --ink:#E9EEF3;
+    --ink:#EAEFF4;
     --ink-dk:#11161B;
-    --muted:#93A1AD;
-    --muted-dk:#5B6B78;
-    --line:#28313A;
-    --line-lt:#E2E8EE;
-    /* categorical appliance palette */
-    --fridge:#12B886;
-    --light:#FAB005;
-    --tv:#7048E8;
-    --ac:#4263EB;
-    --kettle:#FA5252;
-    --accent:#34D399;
+    --muted:#94A1AD;
+    --muted-dk:#5C6B78;
+    --line:#2A313A;
+    --line-lt:#E2E7EC;
+    --healthy:#1FB8D4;
+    --healthy-lt:#E0F6FB;
+    --fault:#F4791F;
+    --fault-lt:#FCEBDC;
+    --accent:#F4791F;
+    --steel:#8A97A3;
     --maxw:1000px;
     --r:16px;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Inter",system-ui,sans-serif;line-height:1.62;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif;line-height:1.62;-webkit-font-smoothing:antialiased}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
-  .mono{font-family:"JetBrains Mono",monospace}
-  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:600}
-
-  h1,h2,h3{font-family:"Sora",sans-serif;letter-spacing:-.02em}
+  .mono{font-family:"Space Mono",monospace}
+  .eyebrow{font-family:"Space Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1,h2,h3{font-family:"Archivo",sans-serif;letter-spacing:-.02em}
   p{margin:0 0 14px}
   .muted{color:var(--muted)}
   .divider{height:1px;background:var(--line);border:0;margin:0}
 
-  /* ---------- hero ---------- */
-  .hero{padding:62px 0 18px;position:relative;overflow:hidden}
-  .hero::before{
-    content:"";position:absolute;inset:0;
-    background:radial-gradient(900px 420px at 75% -10%, rgba(52,211,153,.14), transparent 60%);
-    pointer-events:none;
-  }
-  .hero h1{font-weight:700;font-size:clamp(2.1rem,6vw,3.7rem);line-height:1.03;margin:18px 0 16px;max-width:16ch}
+  /* hero */
+  .hero{padding:62px 0 20px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(880px 420px at 78% -12%, rgba(244,121,31,.16), transparent 60%);pointer-events:none}
+  .hero h1{font-weight:800;font-size:clamp(2.1rem,6vw,3.7rem);line-height:1.02;margin:18px 0 16px;max-width:17ch}
   .hero .lede{font-size:clamp(1.05rem,2.3vw,1.28rem);color:var(--muted);max-width:56ch;margin:0}
   .chips{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
-  .chip{font-family:"JetBrains Mono",monospace;font-size:.74rem;padding:7px 13px;border:1px solid var(--line);border-radius:100px;background:var(--panel);color:var(--muted)}
-  .chip b{color:var(--accent);font-weight:600}
+  .chip{font-family:"Space Mono",monospace;font-size:.74rem;padding:7px 13px;border:1px solid var(--line);border-radius:100px;background:var(--panel);color:var(--muted)}
+  .chip b{color:var(--accent);font-weight:700}
 
-  /* ---------- meter readout ---------- */
-  .readout{
-    margin-top:34px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
-    padding:22px;display:grid;grid-template-columns:1.1fr 1.4fr;gap:22px;align-items:center;
-    box-shadow:0 30px 60px -36px rgba(0,0,0,.7);
-  }
-  .meter-num{border-right:1px solid var(--line);padding-right:22px}
-  .meter-num .lab{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted-dk);text-transform:uppercase}
-  .meter-num .big{font-family:"Sora",sans-serif;font-weight:700;font-size:clamp(2.6rem,7vw,4rem);line-height:1;margin:6px 0 2px}
-  .meter-num .big .u{font-size:1.4rem;color:var(--accent);font-weight:500}
-  .meter-num .sub{font-family:"JetBrains Mono",monospace;font-size:.74rem;color:var(--muted)}
-  .meter-vis svg{display:block;width:100%;height:auto}
-  .meter-cap{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--muted-dk);margin-top:8px}
-  @media(max-width:680px){
-    .readout{grid-template-columns:1fr}
-    .meter-num{border-right:0;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:18px}
-  }
+  /* hero fingerprint */
+  .finger{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:640px){.finger{grid-template-columns:1fr}}
+  .fp{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:0 30px 60px -38px rgba(0,0,0,.7)}
+  .fp .htag{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .fp .htag .name{font-family:"Archivo";font-weight:700;font-size:1.05rem}
+  .fp .htag .dot{font-family:"Space Mono";font-size:.7rem;padding:3px 9px;border-radius:6px}
+  .fp.ok .htag .name{color:var(--healthy)}
+  .fp.bad .htag .name{color:var(--fault)}
+  .fp.ok .dot{background:rgba(31,184,212,.16);color:var(--healthy)}
+  .fp.bad .dot{background:rgba(244,121,31,.16);color:var(--fault)}
+  .panelbox{background:#0d1014;border-radius:9px;padding:8px 10px;margin-bottom:8px}
+  .panelbox .lab{font-family:"Space Mono";font-size:.64rem;letter-spacing:.08em;color:var(--muted-dk);text-transform:uppercase}
+  .panelbox svg{display:block;width:100%;height:auto}
 
-  /* ---------- sections ---------- */
+  /* sections */
   section{padding:48px 0}
   .sec-head{max-width:62ch}
-  h2{font-weight:600;font-size:clamp(1.5rem,3.6vw,2.15rem);line-height:1.12;margin:12px 0 14px}
+  h2{font-weight:700;font-size:clamp(1.5rem,3.6vw,2.15rem);line-height:1.12;margin:12px 0 14px}
   h3{font-weight:600;font-size:1.05rem;margin:0 0 6px}
-
-  /* light section variant */
   .light-sec{background:var(--paper);color:var(--ink-dk)}
   .light-sec .muted{color:var(--muted-dk)}
-  .light-sec .eyebrow{color:#0CA678}
+  .light-sec .eyebrow{color:#C2540A}
 
-  /* ---------- hardware cards ---------- */
+  /* hardware cards */
   .hw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
   .hw{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
   .light-sec .hw{background:#F6F8FA;border-color:var(--line-lt)}
-  .hw .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:12px;background:rgba(52,211,153,.14)}
-  .light-sec .hw .ic{background:#E3F7EF}
-  .hw .ic svg{width:20px;height:20px;stroke:#0CA678;fill:none;stroke-width:1.8}
+  .hw .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:12px;background:rgba(244,121,31,.14)}
+  .light-sec .hw .ic{background:#FCEBDC}
+  .hw .ic svg{width:20px;height:20px;stroke:#C2540A;fill:none;stroke-width:1.8}
   .hw h3{font-size:1rem}
   .hw p{font-size:.9rem;margin:4px 0 0}
-  .hw .pill{display:inline-block;margin-top:10px;font-family:"JetBrains Mono",monospace;font-size:.68rem;padding:3px 8px;border-radius:6px;background:#E3F7EF;color:#087F5B}
   .light-sec .hw p{color:var(--muted-dk)}
-  .safe{margin-top:18px;background:#E3F7EF;border:1px solid #A9E3CC;border-radius:12px;padding:14px 16px;color:#0B5D43;font-size:.92rem}
-  .safe b{color:#08402F}
+  .hw .pill{display:inline-block;margin-top:10px;font-family:"Space Mono",monospace;font-size:.66rem;padding:3px 8px;border-radius:6px;background:#FCEBDC;color:#A8470A}
+  .safe{margin-top:18px;background:#FCEBDC;border:1px solid #F2C49B;border-radius:12px;padding:14px 16px;color:#7A3406;font-size:.92rem}
+  .safe b{color:#5E2804}
 
-  /* ---------- disaggregation signature ---------- */
-  .disagg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;margin-top:22px}
-  .disagg svg{display:block;width:100%;height:auto}
-  .leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-family:"JetBrains Mono",monospace;font-size:.76rem}
-  .leg span{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
-  .leg i{width:13px;height:13px;border-radius:4px;display:inline-block}
-  .arrow-note{text-align:center;font-family:"JetBrains Mono",monospace;font-size:.74rem;color:var(--muted-dk);margin:14px 0 0}
+  /* idea band */
+  .idea{background:#0d1014;color:#EAEFF4;border:1px solid var(--line);border-radius:var(--r);padding:34px;margin-top:20px;text-align:center}
+  .idea .eyebrow{color:var(--healthy)}
+  .idea p{font-family:"Archivo";font-size:clamp(1.25rem,3.3vw,1.8rem);line-height:1.34;font-weight:600;margin:14px auto 0;max-width:32ch}
+  .idea b{color:var(--accent)}
 
-  /* ---------- architecture ---------- */
+  /* diagrams */
   .diagram-scroll{overflow-x:auto;margin-top:22px;border:1px solid var(--line-lt);border-radius:var(--r);background:#FBFCFD}
-  .diagram-scroll svg{display:block;min-width:820px;width:100%;height:auto}
+  .diagram-scroll svg{display:block;min-width:840px;width:100%;height:auto}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-family:"Space Mono",monospace;font-size:.74rem;color:var(--muted-dk)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
 
-  /* ---------- split bar ---------- */
+  /* split */
   .split{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;margin-top:22px}
   .splitbar{display:flex;height:54px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-  .splitbar .hwseg{background:linear-gradient(180deg,#0CA678,#0B8F66);width:30%;display:grid;place-items:center;color:#022;font-family:"Sora";font-weight:600;font-size:.9rem}
-  .splitbar .swseg{background:linear-gradient(180deg,#4263EB,#3B5BDB);width:70%;display:grid;place-items:center;color:#fff;font-family:"Sora";font-weight:600;font-size:.9rem}
-  .split-cap{display:flex;justify-content:space-between;margin-top:10px;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--muted)}
+  .splitbar .hwseg{background:linear-gradient(180deg,#F4791F,#D8650F);width:55%;display:grid;place-items:center;color:#fff;font-family:"Archivo";font-weight:700;font-size:.9rem}
+  .splitbar .swseg{background:linear-gradient(180deg,#1FB8D4,#1599B0);width:45%;display:grid;place-items:center;color:#04222a;font-family:"Archivo";font-weight:700;font-size:.9rem}
+  .split-cap{display:flex;justify-content:space-between;margin-top:10px;font-family:"Space Mono",monospace;font-size:.72rem;color:var(--muted)}
   .split-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
   .split-cols h3{font-size:.96rem}
   .split-cols ul{margin:6px 0 0;padding-left:18px}
   .split-cols li{font-size:.88rem;color:var(--muted);margin-bottom:4px}
   @media(max-width:620px){.split-cols{grid-template-columns:1fr}}
 
-  /* ---------- reasons ---------- */
-  .reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:22px}
+  /* reasons */
+  .reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:22px}
   .reason{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
-  .reason .num{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:var(--accent);font-weight:600}
+  .reason .num{font-family:"Space Mono",monospace;font-size:.8rem;color:var(--accent);font-weight:700}
   .reason h3{margin-top:8px}
   .reason p{font-size:.92rem;color:var(--muted);margin:0}
 
-  /* ---------- footer ---------- */
   footer{padding:42px 0 64px;color:var(--muted);font-size:.85rem}
   footer .mono{font-size:.74rem}
 
-  @media (prefers-reduced-motion:reduce){
-    .draw{stroke-dasharray:none !important;stroke-dashoffset:0 !important;animation:none !important}
-    .band{animation:none !important;opacity:1 !important}
-  }
-  .draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.4s ease forwards}
+  @media (prefers-reduced-motion:reduce){.trace{stroke-dasharray:none !important;stroke-dashoffset:0 !important;animation:none !important}}
+  .trace{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2200;stroke-dashoffset:2200;animation:draw 2.4s ease forwards}
   @keyframes draw{to{stroke-dashoffset:0}}
-  .band{opacity:0;animation:fade .7s ease forwards}
-  @keyframes fade{to{opacity:1}}
-  .b1{animation-delay:.2s}.b2{animation-delay:.5s}.b3{animation-delay:.8s}.b4{animation-delay:1.1s}.b5{animation-delay:1.4s}
 </style>
 </head>
 <body>
 
-<!-- ===== HERO ===== -->
+<!-- reusable signal paths -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<path id="p-ht" d="M 0.0,48.4 L 1.5,48.0 L 3.1,44.5 L 4.6,46.7 L 6.2,44.0 L 7.7,44.8 L 9.2,46.5 L 10.8,44.5 L 12.3,47.3 L 13.8,45.9 L 15.4,48.3 L 16.9,48.6 L 18.5,47.4 L 20.0,45.7 L 21.5,49.3 L 23.1,48.9 L 24.6,46.8 L 26.2,45.0 L 27.7,46.8 L 29.2,47.6 L 30.8,44.7 L 32.3,49.5 L 33.8,45.8 L 35.4,49.3 L 36.9,50.8 L 38.5,51.9 L 40.0,52.2 L 41.5,50.9 L 43.1,55.5 L 44.6,54.8 L 46.2,55.7 L 47.7,58.1 L 49.2,58.0 L 50.8,60.9 L 52.3,61.0 L 53.8,60.0 L 55.4,57.1 L 56.9,57.4 L 58.5,56.7 L 60.0,53.9 L 61.5,52.9 L 63.1,52.0 L 64.6,48.0 L 66.2,46.9 L 67.7,47.9 L 69.2,45.2 L 70.8,44.7 L 72.3,42.4 L 73.8,43.0 L 75.4,45.2 L 76.9,42.0 L 78.5,46.8 L 80.0,45.8 L 81.5,44.6 L 83.1,48.2 L 84.6,46.9 L 86.2,49.5 L 87.7,46.6 L 89.2,46.2 L 90.8,47.1 L 92.3,45.4 L 93.8,48.1 L 95.4,46.1 L 96.9,46.6 L 98.5,46.8 L 100.0,47.7 L 101.5,46.3 L 103.1,46.5 L 104.6,49.8 L 106.2,50.0 L 107.7,54.3 L 109.2,52.4 L 110.8,54.0 L 112.3,53.6 L 113.8,55.5 L 115.4,59.1 L 116.9,59.2 L 118.5,58.0 L 120.0,61.1 L 121.5,58.4 L 123.1,59.0 L 124.6,58.1 L 126.2,57.0 L 127.7,51.9 L 129.2,53.4 L 130.8,51.2 L 132.3,49.0 L 133.8,45.2 L 135.4,48.0 L 136.9,45.3 L 138.5,44.2 L 140.0,42.2 L 141.5,42.5 L 143.1,42.5 L 144.6,45.8 L 146.2,45.6 L 147.7,46.5 L 149.2,44.4 L 150.8,44.5 L 152.3,48.9 L 153.8,49.0 L 155.4,48.8 L 156.9,48.8 L 158.5,47.4 L 160.0,46.8 L 161.5,48.3 L 163.1,49.5 L 164.6,47.5 L 166.2,48.0 L 167.7,47.5 L 169.2,46.2 L 170.8,48.4 L 172.3,50.3 L 173.8,51.0 L 175.4,52.1 L 176.9,56.5 L 178.5,53.6 L 180.0,55.4 L 181.5,55.9 L 183.1,57.0 L 184.6,59.3 L 186.2,59.3 L 187.7,60.4 L 189.2,57.0 L 190.8,58.8 L 192.3,57.4 L 193.8,55.2 L 195.4,53.8 L 196.9,51.3 L 198.5,51.1 L 200.0,50.0 L 201.5,48.0 L 203.1,47.3 L 204.6,45.3 L 206.2,46.6 L 207.7,42.2 L 209.2,43.7 L 210.8,46.3 L 212.3,46.3 L 213.8,46.3 L 215.4,46.8 L 216.9,48.5 L 218.5,45.3 L 220.0,44.8 L 221.5,47.6 L 223.1,47.6 L 224.6,49.5 L 226.2,49.3 L 227.7,47.9 L 229.2,48.2 L 230.8,45.4 L 232.3,48.9 L 233.8,50.0 L 235.4,45.9 L 236.9,48.9 L 238.5,51.8 L 240.0,51.0 L 241.5,54.9 L 243.1,53.7 L 244.6,52.8 L 246.2,54.6 L 247.7,56.5 L 249.2,59.4 L 250.8,59.4 L 252.3,60.5 L 253.8,57.2 L 255.4,57.8 L 256.9,55.6 L 258.5,56.6 L 260.0,55.7 L 261.5,51.1 L 263.1,48.6 L 264.6,47.7 L 266.2,46.4 L 267.7,45.0 L 269.2,44.4 L 270.8,46.2 L 272.3,44.2 L 273.8,44.8 L 275.4,46.5 L 276.9,46.8 L 278.5,46.0 L 280.0,46.6 L 281.5,45.0 L 283.1,44.2 L 284.6,47.1 L 286.2,45.0 L 287.7,45.0 L 289.2,45.2 L 290.8,48.1 L 292.3,48.7 L 293.8,48.6 L 295.4,48.6 L 296.9,48.5 L 298.5,46.6 L 300.0,45.5 L 301.5,46.3 L 303.1,48.8 L 304.6,48.9 L 306.2,49.3 L 307.7,54.1 L 309.2,52.6 L 310.8,52.7 L 312.3,54.6 L 313.8,55.9 L 315.4,58.1 L 316.9,60.2 L 318.5,57.4 L 320.0,59.5 L 321.5,56.7 L 323.1,55.0 L 324.6,56.7 L 326.2,55.3 L 327.7,51.0 L 329.2,50.5 L 330.8,51.6 L 332.3,50.3 L 333.8,48.8 L 335.4,43.9 L 336.9,43.5 L 338.5,46.2 L 340.0,42.5 L 341.5,41.7 L 343.1,43.5 L 344.6,45.5 L 346.2,45.0 L 347.7,47.6 L 349.2,48.7 L 350.8,44.4 L 352.3,46.4 L 353.8,47.2 L 355.4,45.3 L 356.9,47.8 L 358.5,45.5 L 360.0,45.6 L 361.5,48.6 L 363.1,48.3 L 364.6,48.2 L 366.2,48.7 L 367.7,47.4 L 369.2,49.7 L 370.8,49.7 L 372.3,52.2 L 373.8,49.6 L 375.4,53.7 L 376.9,54.5 L 378.5,55.2 L 380.0,54.8 L 381.5,58.2 L 383.1,56.4 L 384.6,58.8 L 386.2,58.6 L 387.7,58.3 L 389.2,60.1 L 390.8,56.9 L 392.3,56.9 L 393.8,56.2 L 395.4,50.6 L 396.9,52.1 L 398.5,49.0 L 400.0,46.3"/>
+<path id="p-ft" d="M 0.0,48.5 L 1.5,35.4 L 3.1,43.2 L 4.6,48.9 L 6.2,44.0 L 7.7,44.9 L 9.2,46.9 L 10.8,44.5 L 12.3,47.8 L 13.8,46.0 L 15.4,48.7 L 16.9,49.1 L 18.5,47.5 L 20.0,45.3 L 21.5,49.7 L 23.1,49.1 L 24.6,46.6 L 26.2,44.6 L 27.7,46.7 L 29.2,47.7 L 30.8,44.2 L 32.3,50.0 L 33.8,45.5 L 35.4,49.5 L 36.9,51.1 L 38.5,52.3 L 40.0,52.4 L 41.5,50.6 L 43.1,55.8 L 44.6,54.7 L 46.2,55.6 L 47.7,58.2 L 49.2,47.5 L 50.8,65.3 L 52.3,63.4 L 53.8,60.3 L 55.4,56.9 L 56.9,57.4 L 58.5,56.9 L 60.0,53.8 L 61.5,53.0 L 63.1,52.2 L 64.6,47.7 L 66.2,46.7 L 67.7,48.2 L 69.2,45.1 L 70.8,44.6 L 72.3,42.1 L 73.8,42.7 L 75.4,45.4 L 76.9,41.6 L 78.5,47.2 L 80.0,45.9 L 81.5,44.4 L 83.1,48.5 L 84.6,46.9 L 86.2,50.0 L 87.7,46.4 L 89.2,45.9 L 90.8,47.0 L 92.3,45.1 L 93.8,48.3 L 95.4,45.9 L 96.9,51.1 L 98.5,53.9 L 100.0,47.7 L 101.5,44.9 L 103.1,46.0 L 104.6,49.8 L 106.2,49.8 L 107.7,54.7 L 109.2,52.2 L 110.8,53.9 L 112.3,53.1 L 113.8,55.2 L 115.4,59.3 L 116.9,59.3 L 118.5,57.8 L 120.0,61.6 L 121.5,58.4 L 123.1,59.3 L 124.6,58.5 L 126.2,57.4 L 127.7,51.6 L 129.2,53.8 L 130.8,51.5 L 132.3,49.1 L 133.8,44.8 L 135.4,48.4 L 136.9,45.3 L 138.5,44.1 L 140.0,41.9 L 141.5,42.2 L 143.1,42.1 L 144.6,67.7 L 146.2,49.8 L 147.7,43.8 L 149.2,43.1 L 150.8,44.0 L 152.3,49.2 L 153.8,49.3 L 155.4,49.1 L 156.9,49.1 L 158.5,47.5 L 160.0,46.7 L 161.5,48.5 L 163.1,50.0 L 164.6,47.6 L 166.2,48.1 L 167.7,47.4 L 169.2,45.7 L 170.8,48.2 L 172.3,50.3 L 173.8,50.9 L 175.4,51.9 L 176.9,57.0 L 178.5,53.2 L 180.0,55.1 L 181.5,55.5 L 183.1,56.7 L 184.6,59.4 L 186.2,59.4 L 187.7,60.8 L 189.2,56.9 L 190.8,59.2 L 192.3,81.0 L 193.8,50.5 L 195.4,50.3 L 196.9,51.8 L 198.5,51.6 L 200.0,50.5 L 201.5,48.3 L 203.1,47.7 L 204.6,45.4 L 206.2,47.1 L 207.7,41.9 L 209.2,43.6 L 210.8,46.7 L 212.3,46.5 L 213.8,46.5 L 215.4,46.9 L 216.9,48.9 L 218.5,44.9 L 220.0,44.3 L 221.5,47.6 L 223.1,47.6 L 224.6,49.9 L 226.2,49.7 L 227.7,48.1 L 229.2,48.5 L 230.8,45.1 L 232.3,49.3 L 233.8,50.5 L 235.4,45.5 L 236.9,48.8 L 238.5,52.1 L 240.0,50.9 L 241.5,42.4 L 243.1,52.5 L 244.6,54.1 L 246.2,54.2 L 247.7,56.3 L 249.2,59.7 L 250.8,59.5 L 252.3,60.8 L 253.8,56.9 L 255.4,57.8 L 256.9,55.3 L 258.5,56.8 L 260.0,55.9 L 261.5,50.8 L 263.1,48.1 L 264.6,47.3 L 266.2,46.1 L 267.7,44.7 L 269.2,44.1 L 270.8,46.4 L 272.3,44.2 L 273.8,45.0 L 275.4,47.0 L 276.9,47.3 L 278.5,46.2 L 280.0,46.8 L 281.5,44.8 L 283.1,43.7 L 284.6,47.2 L 286.2,44.6 L 287.7,44.5 L 289.2,34.3 L 290.8,52.2 L 292.3,50.9 L 293.8,48.8 L 295.4,48.9 L 296.9,48.8 L 298.5,46.4 L 300.0,45.1 L 301.5,45.9 L 303.1,48.8 L 304.6,48.7 L 306.2,49.0 L 307.7,54.6 L 309.2,52.4 L 310.8,52.3 L 312.3,54.3 L 313.8,55.6 L 315.4,58.2 L 316.9,60.5 L 318.5,57.1 L 320.0,59.7 L 321.5,56.4 L 323.1,54.5 L 324.6,56.8 L 326.2,55.4 L 327.7,50.6 L 329.2,50.2 L 330.8,51.9 L 332.3,50.7 L 333.8,49.1 L 335.4,43.5 L 336.9,47.8 L 338.5,53.8 L 340.0,42.2 L 341.5,40.2 L 343.1,43.4 L 344.6,45.6 L 346.2,44.9 L 347.7,48.0 L 349.2,49.2 L 350.8,43.9 L 352.3,46.2 L 353.8,47.2 L 355.4,44.9 L 356.9,47.9 L 358.5,45.1 L 360.0,45.3 L 361.5,48.8 L 363.1,48.5 L 364.6,48.4 L 366.2,48.9 L 367.7,47.3 L 369.2,49.9 L 370.8,49.8 L 372.3,52.6 L 373.8,49.2 L 375.4,53.8 L 376.9,54.6 L 378.5,55.1 L 380.0,54.4 L 381.5,58.2 L 383.1,55.9 L 384.6,80.4 L 386.2,62.7 L 387.7,55.5 L 389.2,59.7 L 390.8,57.0 L 392.3,57.2 L 393.8,56.7 L 395.4,50.3 L 396.9,52.5 L 398.5,49.1 L 400.0,46.1"/>
+<path id="p-hf" d="M 0.0,85.2 L 2.0,85.6 L 4.0,85.4 L 6.0,85.4 L 8.0,85.1 L 10.0,86.1 L 12.0,85.5 L 14.0,86.0 L 16.0,85.9 L 18.0,85.1 L 20.0,85.1 L 22.0,83.9 L 24.0,81.5 L 26.0,78.0 L 28.0,74.7 L 30.0,71.2 L 32.0,70.0 L 34.0,71.4 L 36.0,74.5 L 38.0,78.9 L 40.0,82.1 L 42.0,84.4 L 44.0,84.9 L 46.0,85.8 L 48.0,85.7 L 50.0,85.7 L 52.0,86.7 L 54.0,86.4 L 56.0,85.9 L 58.0,86.0 L 60.0,87.1 L 62.0,87.1 L 64.0,86.7 L 66.0,87.3 L 68.0,87.0 L 70.0,87.3 L 72.0,86.5 L 100.0,86.7 L 140.0,88.0 L 180.0,87.6 L 220.0,88.6 L 260.0,87.8 L 300.0,88.7 L 340.0,89.0 L 380.0,88.7 L 400.0,88.4"/>
+<path id="p-ff" d="M 0.0,85.0 L 20.0,85.4 L 24.0,84.0 L 26.0,82.1 L 28.0,77.0 L 30.0,73.3 L 32.0,72.0 L 34.0,73.7 L 36.0,77.4 L 38.0,82.2 L 40.0,84.0 L 60.0,86.6 L 100.0,86.5 L 102.0,85.0 L 104.0,79.3 L 106.0,74.4 L 108.0,70.1 L 110.0,71.7 L 112.0,75.0 L 114.0,71.0 L 116.0,60.7 L 118.0,49.5 L 120.0,45.5 L 122.0,50.6 L 124.0,61.7 L 126.0,70.5 L 128.0,74.9 L 130.0,72.4 L 132.0,71.6 L 134.0,74.3 L 136.0,79.6 L 138.0,85.4 L 160.0,87.9 L 170.0,86.1 L 172.0,84.6 L 174.0,77.9 L 176.0,69.3 L 178.0,62.0 L 180.0,57.4 L 182.0,61.2 L 184.0,69.3 L 186.0,78.6 L 188.0,84.2 L 210.0,87.6 L 230.0,85.8 L 232.0,81.5 L 234.0,73.4 L 236.0,60.2 L 238.0,48.4 L 240.0,42.1 L 242.0,47.9 L 244.0,60.2 L 246.0,73.3 L 248.0,82.5 L 250.0,87.1 L 288.0,87.8 L 290.0,86.8 L 292.0,85.2 L 294.0,80.7 L 296.0,73.3 L 298.0,66.3 L 300.0,62.9 L 302.0,66.3 L 304.0,73.3 L 306.0,80.6 L 308.0,85.1 L 330.0,89.3 L 360.0,88.3 L 400.0,89.6"/>
+</defs></svg>
+
+<!-- HERO -->
 <header class="hero">
   <div class="wrap">
     <span class="eyebrow">Final-year project · Electrical engineering</span>
-    <h1>One sensor. The whole house, appliance by appliance.</h1>
-    <p class="lede">A single clip-on sensor watches the total power coming into a home. An AI model then untangles that one signal to tell you which appliances are running — no sensor on each device. Small hardware, big software.</p>
+    <h1>Catch a motor's fault before it breaks down</h1>
+    <p class="lede">Build a small spinning test rig, deliberately damage it, and record how it vibrates. An AI model then learns each fault's "fingerprint" and names what's wrong — bearing damage, imbalance, misalignment — from the vibration alone. A real machine to build, and real AI to make it smart.</p>
     <div class="chips">
-      <span class="chip"><b>Hardware:</b> 1 clip-on sensor + ESP32</span>
-      <span class="chip"><b>Software:</b> AI disaggregation</span>
-      <span class="chip"><b>Data:</b> your device collects it</span>
-      <span class="chip"><b>Output:</b> a publishable paper</span>
+      <span class="chip"><b>≈55%</b> hardware</span>
+      <span class="chip"><b>≈45%</b> software · AI/ML</span>
+      <span class="chip">A real spinning rig</span>
+      <span class="chip">You induce the faults</span>
+      <span class="chip">Paper-friendly</span>
     </div>
 
-    <div class="readout" role="img" aria-label="Smart meter readout showing total household power being split into appliances">
-      <div class="meter-num">
-        <div class="lab">Total power · whole house</div>
-        <div class="big">1.34<span class="u"> kW</span></div>
-        <div class="sub">one number → many appliances</div>
+    <div class="finger">
+      <div class="fp ok">
+        <div class="htag"><span class="name">Healthy motor</span><span class="dot">NORMAL</span></div>
+        <div class="panelbox"><span class="lab">Vibration · time</span>
+          <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:74px"><use href="#p-ht" class="trace" stroke="#1FB8D4" stroke-width="1.6"/></svg></div>
+        <div class="panelbox"><span class="lab">Frequency spectrum (FFT)</span>
+          <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:74px"><use href="#p-hf" fill="rgba(31,184,212,.16)" stroke="#1FB8D4" stroke-width="1.6"/></svg></div>
       </div>
-      <div class="meter-vis">
-        <svg viewBox="0 0 700 230" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-          <!-- baseline grid -->
-          <g stroke="#28313A" stroke-width="1">
-            <line x1="40" y1="200" x2="660" y2="200"/>
-            <line x1="40" y1="153" x2="660" y2="153" stroke-dasharray="3 6" opacity="0.5"/>
-            <line x1="40" y1="106" x2="660" y2="106" stroke-dasharray="3 6" opacity="0.5"/>
-            <line x1="40" y1="60" x2="660" y2="60" stroke-dasharray="3 6" opacity="0.5"/>
-          </g>
-          <!-- total line -->
-          <path class="draw" d="M 40.0,197.6 L 43.9,197.6 L 47.8,179.9 L 51.6,179.9 L 55.5,179.9 L 59.4,179.9 L 63.2,179.9 L 67.1,179.9 L 71.0,179.9 L 74.9,179.9 L 78.8,179.9 L 82.6,179.9 L 86.5,179.9 L 90.4,179.9 L 94.2,179.9 L 98.1,197.6 L 102.0,197.6 L 105.9,197.6 L 109.8,197.6 L 113.6,197.6 L 117.5,197.6 L 121.4,197.6 L 125.2,197.6 L 129.1,197.6 L 133.0,197.6 L 136.9,197.6 L 140.8,197.6 L 144.6,197.6 L 148.5,197.6 L 152.4,197.6 L 156.2,197.6 L 160.1,197.6 L 164.0,197.6 L 167.9,183.5 L 171.8,165.8 L 175.6,165.8 L 179.5,165.8 L 183.4,165.8 L 187.2,165.8 L 191.1,165.8 L 195.0,165.8 L 198.9,165.8 L 202.8,165.8 L 206.6,165.8 L 210.5,165.8 L 214.4,165.8 L 218.2,165.8 L 222.1,183.5 L 226.0,183.5 L 229.9,128.2 L 233.8,128.1 L 237.6,127.9 L 241.5,127.8 L 245.4,127.6 L 249.2,127.4 L 253.1,127.3 L 257.0,127.1 L 260.9,126.9 L 264.8,126.8 L 268.6,126.6 L 272.5,126.4 L 276.4,126.3 L 280.2,126.1 L 284.1,126.0 L 288.0,125.8 L 291.9,125.6 L 295.8,107.8 L 299.6,107.6 L 303.5,107.4 L 307.4,107.3 L 311.2,107.1 L 315.1,106.9 L 319.0,106.8 L 322.9,106.8 L 326.8,106.8 L 330.6,106.8 L 334.5,106.8 L 338.4,106.8 L 342.2,106.8 L 346.1,124.5 L 350.0,124.5 L 353.9,124.5 L 357.8,124.5 L 361.6,124.5 L 365.5,124.5 L 369.4,124.5 L 373.2,124.5 L 377.1,63.1 L 381.0,63.1 L 384.9,63.1 L 388.8,63.1 L 392.6,63.1 L 396.5,63.1 L 400.4,63.1 L 404.2,63.1 L 408.1,63.1 L 412.0,124.5 L 415.9,124.5 L 419.8,106.8 L 423.6,106.8 L 427.5,106.8 L 431.4,106.8 L 435.2,106.8 L 439.1,106.8 L 443.0,106.8 L 446.9,106.8 L 450.8,106.8 L 454.6,106.8 L 458.5,106.8 L 462.4,106.8 L 466.2,106.8 L 470.1,124.5 L 474.0,124.5 L 477.9,124.5 L 481.8,124.5 L 485.6,124.5 L 489.5,124.5 L 493.4,124.5 L 497.2,124.5 L 501.1,124.5 L 505.0,124.5 L 508.9,124.5 L 512.8,124.5 L 516.6,124.5 L 520.5,124.5 L 524.4,171.7 L 528.2,171.7 L 532.1,171.7 L 536.0,171.7 L 539.9,171.7 L 543.8,154.0 L 547.6,154.0 L 551.5,154.0 L 555.4,154.0 L 559.2,154.0 L 563.1,154.0 L 567.0,168.1 L 570.9,168.1 L 574.8,168.1 L 578.6,168.1 L 582.5,168.1 L 586.4,168.1 L 590.2,168.1 L 594.1,185.8 L 598.0,185.8 L 601.9,185.8 L 605.8,185.8 L 609.6,185.8 L 613.5,185.8 L 617.4,185.8 L 621.2,185.8 L 625.1,185.8 L 629.0,185.8 L 632.9,185.8 L 636.8,185.8 L 640.6,185.8 L 644.5,185.8 L 648.4,185.8 L 652.2,185.8 L 656.1,185.8 L 660.0,185.8"
-            fill="none" stroke="#34D399" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
-        </svg>
-        <div class="meter-cap">AGGREGATE LOAD · ONE WIRE · OVER TIME</div>
+      <div class="fp bad">
+        <div class="htag"><span class="name">Faulty bearing</span><span class="dot">FAULT</span></div>
+        <div class="panelbox"><span class="lab">Vibration · time — note the impacts</span>
+          <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:74px"><use href="#p-ft" class="trace" stroke="#F4791F" stroke-width="1.6"/></svg></div>
+        <div class="panelbox"><span class="lab">Frequency spectrum — peaks appear</span>
+          <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:74px"><use href="#p-ff" fill="rgba(244,121,31,.16)" stroke="#F4791F" stroke-width="1.6"/></svg></div>
       </div>
     </div>
   </div>
@@ -189,237 +171,325 @@
 
 <hr class="divider">
 
-<!-- ===== 01 PROBLEM ===== -->
+<!-- 01 PROBLEM -->
 <section>
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">01 — The everyday problem</span>
-      <h2>Your meter shows one number for everything</h2>
-      <p class="muted">A home electricity meter tells you the <em>total</em> being used right now — but not <em>what's</em> using it. Is the bill high because of the fridge, the water heater, or that old AC? Normally you'd have to put a sensor on every single appliance to find out. That's expensive and impractical.</p>
-      <p class="muted">This project takes the smarter route, called <b>Non-Intrusive Load Monitoring (NILM)</b>: measure only the one main wire, then let software figure out the breakdown. The hardware stays tiny; the intelligence lives in the model.</p>
+      <h2>Motors fail, usually with warning signs</h2>
+      <p class="muted">Electric motors run pumps, fans, conveyors, and machines everywhere. When a bearing wears, a shaft bends, or parts go out of alignment, the motor doesn't stop at once — it first starts <b>vibrating differently</b>. Ignore those signs and you get a sudden breakdown, an expensive repair, and unplanned downtime.</p>
+      <p class="muted">A skilled technician can sometimes feel or hear that "something's off." The goal here is to capture that skill with a cheap sensor and a model, so a fault is flagged <b>early</b> and automatically.</p>
     </div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- ===== 02 HARDWARE (light section) ===== -->
+<!-- 02 IDEA -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">02 — The core idea</span>
+      <h2>Every fault has a vibration fingerprint</h2>
+      <p class="muted">A spinning machine vibrates at frequencies tied to its speed and parts. Each fault adds its own telltale pattern: a damaged bearing produces repeated tiny <b>impacts</b>; imbalance shows up strongly at the running speed; misalignment shows at twice the running speed. In the frequency spectrum (the FFT, like in the hero above), these appear as <b>peaks at specific places</b>. The model learns to read those peaks.</p>
+    </div>
+    <div class="idea">
+      <span class="eyebrow">In one sentence</span>
+      <p>Feed the model a short clip of vibration, and it tells you <b>which fault the motor has</b> — like a mechanic diagnosing a machine by the way it shakes and sounds.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 03 HARDWARE -->
 <section class="light-sec">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">02 — The hardware (kept small &amp; safe)</span>
-      <h2>A clip-on sensor and a tiny board</h2>
-      <p class="muted">This is the entire hardware contribution — cheap, available in Kathmandu, and built to be safe. It's a real, demonstrable device, but it isn't where your time goes.</p>
+      <span class="eyebrow">03 — The hardware (the bigger half)</span>
+      <h2>A small, real test rig you build</h2>
+      <p class="muted">This is where the extra hardware lives. You assemble a bench rig: a motor turning a shaft on a bearing, with sensors watching it. Then you swap in damaged parts to create faults on purpose — that's how you get labeled data.</p>
     </div>
 
     <div class="hw-grid">
       <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 4v8a5 5 0 0 0 10 0V4"/><circle cx="12" cy="18" r="3"/></svg></div>
-        <h3>Current clamp (SCT-013)</h3>
-        <p>Snaps <em>around</em> the wire — never touches live metal. Reads how much current is flowing.</p>
-        <span class="pill">non-contact · safe</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><path d="M15 12h6M18 9v6"/></svg></div>
+        <h3>Small motor + base</h3>
+        <p>A low-power induction or DC motor bolted to a rigid baseplate. The thing whose health you're watching.</p>
+        <span class="pill">core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12h16"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div>
+        <h3>Shaft, coupling &amp; bearing</h3>
+        <p>The shaft rides in a pillow-block bearing. Swappable so you can fit healthy or damaged bearings.</p>
+        <span class="pill">core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M12 3v3M12 18v3"/></svg></div>
+        <h3>Accelerometer</h3>
+        <p>An ADXL345 or MPU6050 mounted on the bearing housing — measures the vibration. The main sensor.</p>
+        <span class="pill">core sensor</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 10 0V4"/><circle cx="12" cy="17" r="3"/></svg></div>
+        <h3>Current sensor</h3>
+        <p>An ACS712 or clamp on the motor supply, so you can add motor-current analysis (MCSA) alongside vibration.</p>
+        <span class="pill">core sensor</span>
       </div>
       <div class="hw">
         <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
-        <h3>ESP32 micro-board</h3>
-        <p>Reads the sensor many times a second and sends the numbers out over Wi-Fi. Built-in wireless, very cheap.</p>
-        <span class="pill">samples + uploads</span>
+        <h3>MCU / DAQ board</h3>
+        <p>An ESP32 or Arduino with a fast ADC samples the sensors many times a second and streams the data out.</p>
+        <span class="pill">core</span>
       </div>
       <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4z"/><path d="M8 7V4h8v3"/></svg></div>
-        <h3>Voltage sensor (optional)</h3>
-        <p>A ZMPT101B module if you want true power (watts) and not just current. Add only if your scope needs it.</p>
-        <span class="pill">optional add-on</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" /><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Fault specimens</h3>
+        <p>A worn/scratched bearing, an off-centre weight for imbalance, shims for misalignment — your sources of faults.</p>
+        <span class="pill">core</span>
       </div>
       <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M5 10a7 7 0 1 0 14 0"/></svg></div>
-        <h3>Logging</h3>
-        <p>Readings stream to a laptop or a small file. That stored stream becomes your real, labeled dataset.</p>
-        <span class="pill">your own data</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></div>
+        <h3>Wiring &amp; supply</h3>
+        <p>Breadboard, jumpers, motor driver/supply, and a USB link to the laptop for power and data.</p>
+        <span class="pill">core</span>
+      </div>
+      <div class="hw">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5"/></svg></div>
+        <h3>Tachometer (optional)</h3>
+        <p>An IR/hall speed sensor to know exact rpm — helps line faults up with running-speed frequencies.</p>
+        <span class="pill">optional</span>
       </div>
     </div>
 
-    <div class="safe"><b>Safety note:</b> the current clamp is the key choice — because it clips around insulated wire instead of breaking into the circuit, you avoid direct mains contact, which is what makes this one of the safest meaningful hardware builds for a student project.</div>
+    <div class="safe"><b>Safety:</b> a spinning rig has real hazards — add a guard over rotating parts, secure the baseplate, keep fingers and cables clear, and run mains-powered motors only with proper supply protection and <b>your supervisor's sign-off</b>. Start at low speed.</div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- ===== 03 SIGNATURE: disaggregation ===== -->
-<section>
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">03 — The core idea</span>
-      <h2>Splitting one signal back into appliances</h2>
-      <p class="muted">Every appliance leaves a "fingerprint" in the total power: a fridge cycles on and off, a kettle is a short tall spike, an AC is a long heavy block. The model learns these fingerprints and pulls the single line apart into who's-using-what — this is the heart of the project.</p>
-    </div>
-
-    <div class="disagg">
-      <svg viewBox="0 0 700 220" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Stacked area chart showing the total household load split into fridge, lighting, TV, AC and kettle">
-        <g stroke="#28313A" stroke-width="1">
-          <line x1="40" y1="200" x2="660" y2="200"/>
-        </g>
-        <path class="band b1" fill="#12B886" fill-opacity="0.9" stroke="#0B8F66" stroke-width="0.6" d="M 40.0,200.0 L 43.9,200.0 L 47.8,200.0 L 51.6,200.0 L 55.5,200.0 L 59.4,200.0 L 63.2,200.0 L 67.1,200.0 L 71.0,200.0 L 74.9,200.0 L 78.8,200.0 L 82.6,200.0 L 86.5,200.0 L 90.4,200.0 L 94.2,200.0 L 98.1,200.0 L 102.0,200.0 L 105.9,200.0 L 109.8,200.0 L 113.6,200.0 L 117.5,200.0 L 121.4,200.0 L 125.2,200.0 L 129.1,200.0 L 133.0,200.0 L 136.9,200.0 L 140.8,200.0 L 144.6,200.0 L 148.5,200.0 L 152.4,200.0 L 156.2,200.0 L 160.1,200.0 L 164.0,200.0 L 167.9,200.0 L 171.8,200.0 L 175.6,200.0 L 179.5,200.0 L 183.4,200.0 L 187.2,200.0 L 191.1,200.0 L 195.0,200.0 L 198.9,200.0 L 202.8,200.0 L 206.6,200.0 L 210.5,200.0 L 214.4,200.0 L 218.2,200.0 L 222.1,200.0 L 226.0,200.0 L 229.9,200.0 L 233.8,200.0 L 237.6,200.0 L 241.5,200.0 L 245.4,200.0 L 249.2,200.0 L 253.1,200.0 L 257.0,200.0 L 260.9,200.0 L 264.8,200.0 L 268.6,200.0 L 272.5,200.0 L 276.4,200.0 L 280.2,200.0 L 284.1,200.0 L 288.0,200.0 L 291.9,200.0 L 295.8,200.0 L 299.6,200.0 L 303.5,200.0 L 307.4,200.0 L 311.2,200.0 L 315.1,200.0 L 319.0,200.0 L 322.9,200.0 L 326.8,200.0 L 330.6,200.0 L 334.5,200.0 L 338.4,200.0 L 342.2,200.0 L 346.1,200.0 L 350.0,200.0 L 353.9,200.0 L 357.8,200.0 L 361.6,200.0 L 365.5,200.0 L 369.4,200.0 L 373.2,200.0 L 377.1,200.0 L 381.0,200.0 L 384.9,200.0 L 388.8,200.0 L 392.6,200.0 L 396.5,200.0 L 400.4,200.0 L 404.2,200.0 L 408.1,200.0 L 412.0,200.0 L 415.9,200.0 L 419.8,200.0 L 423.6,200.0 L 427.5,200.0 L 431.4,200.0 L 435.2,200.0 L 439.1,200.0 L 443.0,200.0 L 446.9,200.0 L 450.8,200.0 L 454.6,200.0 L 458.5,200.0 L 462.4,200.0 L 466.2,200.0 L 470.1,200.0 L 474.0,200.0 L 477.9,200.0 L 481.8,200.0 L 485.6,200.0 L 489.5,200.0 L 493.4,200.0 L 497.2,200.0 L 501.1,200.0 L 505.0,200.0 L 508.9,200.0 L 512.8,200.0 L 516.6,200.0 L 520.5,200.0 L 524.4,200.0 L 528.2,200.0 L 532.1,200.0 L 536.0,200.0 L 539.9,200.0 L 543.8,200.0 L 547.6,200.0 L 551.5,200.0 L 555.4,200.0 L 559.2,200.0 L 563.1,200.0 L 567.0,200.0 L 570.9,200.0 L 574.8,200.0 L 578.6,200.0 L 582.5,200.0 L 586.4,200.0 L 590.2,200.0 L 594.1,200.0 L 598.0,200.0 L 601.9,200.0 L 605.8,200.0 L 609.6,200.0 L 613.5,200.0 L 617.4,200.0 L 621.2,200.0 L 625.1,200.0 L 629.0,200.0 L 632.9,200.0 L 636.8,200.0 L 640.6,200.0 L 644.5,200.0 L 648.4,200.0 L 652.2,200.0 L 656.1,200.0 L 660.0,200.0 L 660.0,197.6 L 590.2,179.9 L 547.6,179.9 L 539.9,197.6 L 470.1,197.6 L 466.2,179.9 L 419.8,179.9 L 415.9,197.6 L 346.1,197.6 L 342.2,179.9 L 295.8,179.9 L 291.9,197.6 L 222.1,197.6 L 218.2,179.9 L 171.8,179.9 L 167.9,197.6 L 94.2,179.9 L 43.9,197.6 L 40.0,197.6 Z"/>
-        <path class="band b2" fill="#FAB005" fill-opacity="0.92" d="M 40.0,197.6 L 47.8,179.9 L 94.2,179.9 L 98.1,197.6 L 167.9,197.6 L 171.8,179.9 L 218.2,179.9 L 222.1,197.6 L 229.9,189.6 L 291.9,187.0 L 295.8,169.1 L 319.0,168.1 L 342.2,168.1 L 346.1,185.8 L 415.9,185.8 L 419.8,168.1 L 466.2,168.1 L 470.1,185.8 L 539.9,185.8 L 543.8,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8 L 660.0,185.8 L 590.2,168.1 L 543.8,168.1 L 539.9,185.8 L 470.1,185.8 L 466.2,168.1 L 419.8,168.1 L 415.9,185.8 L 346.1,185.8 L 342.2,168.1 L 319.0,168.1 L 295.8,169.1 L 291.9,187.0 L 229.9,189.6 L 222.1,197.6 L 218.2,179.9 L 171.8,179.9 L 167.9,197.6 L 98.1,197.6 L 94.2,179.9 L 47.8,179.9 L 43.9,197.6 Z"/>
-        <path class="band b3" fill="#7048E8" fill-opacity="0.92" d="M 167.9,197.6 L 171.8,165.8 L 218.2,165.8 L 222.1,183.5 L 229.9,175.4 L 291.9,172.8 L 295.8,155.0 L 319.0,154.0 L 342.2,154.0 L 346.1,171.7 L 415.9,171.7 L 419.8,154.0 L 466.2,154.0 L 470.1,171.7 L 539.9,171.7 L 543.8,154.0 L 563.1,154.0 L 567.0,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8 L 660.0,185.8 L 590.2,168.1 L 567.0,168.1 L 563.1,154.0 L 543.8,154.0 L 539.9,171.7 L 470.1,171.7 L 466.2,154.0 L 419.8,154.0 L 415.9,171.7 L 346.1,171.7 L 342.2,154.0 L 319.0,154.0 L 295.8,155.0 L 291.9,172.8 L 229.9,175.4 L 222.1,183.5 L 218.2,165.8 L 171.8,165.8 L 167.9,183.5 Z"/>
-        <path class="band b4" fill="#4263EB" fill-opacity="0.92" d="M 167.9,183.5 L 171.8,165.8 L 218.2,165.8 L 222.1,183.5 L 229.9,128.2 L 291.9,125.6 L 295.8,107.8 L 319.0,106.8 L 342.2,106.8 L 346.1,124.5 L 415.9,124.5 L 419.8,106.8 L 466.2,106.8 L 470.1,124.5 L 520.5,124.5 L 524.4,171.7 L 539.9,171.7 L 543.8,154.0 L 563.1,154.0 L 567.0,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8 L 660.0,185.8 L 590.2,168.1 L 567.0,168.1 L 563.1,154.0 L 543.8,154.0 L 539.9,171.7 L 524.4,171.7 L 520.5,124.5 L 466.2,106.8 L 419.8,106.8 L 415.9,124.5 L 346.1,124.5 L 342.2,106.8 L 319.0,106.8 L 295.8,107.8 L 291.9,125.6 L 229.9,128.2 L 222.1,183.5 L 218.2,165.8 L 171.8,165.8 Z"/>
-        <path class="band b5" fill="#FA5252" fill-opacity="0.94" d="M 373.2,124.5 L 377.1,63.1 L 408.1,63.1 L 412.0,124.5 L 373.2,124.5 Z"/>
-        <!-- total outline -->
-        <path d="M 40.0,197.6 L 47.8,179.9 L 94.2,179.9 L 98.1,197.6 L 167.9,197.6 L 167.9,183.5 L 171.8,165.8 L 222.1,165.8 L 222.1,183.5 L 229.9,128.2 L 291.9,125.6 L 295.8,107.8 L 342.2,106.8 L 346.1,124.5 L 373.2,124.5 L 377.1,63.1 L 408.1,63.1 L 412.0,124.5 L 419.8,106.8 L 466.2,106.8 L 470.1,124.5 L 520.5,124.5 L 524.4,171.7 L 539.9,171.7 L 543.8,154.0 L 563.1,154.0 L 567.0,168.1 L 590.2,168.1 L 594.1,185.8 L 660.0,185.8"
-          fill="none" stroke="#E9EEF3" stroke-width="1.6" stroke-opacity="0.55" stroke-linejoin="round"/>
-      </svg>
-      <div class="leg">
-        <span><i style="background:var(--fridge)"></i>Fridge (cycles)</span>
-        <span><i style="background:var(--light)"></i>Lighting</span>
-        <span><i style="background:var(--tv)"></i>TV / electronics</span>
-        <span><i style="background:var(--ac)"></i>Air conditioner</span>
-        <span><i style="background:var(--kettle)"></i>Kettle (spike)</span>
-      </div>
-      <p class="arrow-note">↑ The model turns the single green line from the meter into this colored breakdown.</p>
-    </div>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- ===== 04 ARCHITECTURE (light) ===== -->
+<!-- 04 RIG + WIRING -->
 <section class="light-sec">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">04 — How it works, end to end</span>
-      <h2>From the wire to the answer</h2>
-      <p class="muted">The left block is the small hardware. Everything to the right of the dashed line is software — where most of your work and all of the novelty lives.</p>
+      <span class="eyebrow">04 — Layout &amp; wiring</span>
+      <h2>The rig and its signal chain</h2>
+      <p class="muted">Top: how the rig is laid out physically. Bottom: how the sensor signals travel to your laptop. The accelerometer sits right on the bearing — closest to where faults show up.</p>
     </div>
 
     <div class="diagram-scroll">
-      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+      <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
         <defs>
-          <marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L6,3 L0,6 Z" fill="#3B5BDB"/>
-          </marker>
+          <marker id="rar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 Z" fill="#F4791F"/></marker>
+          <marker id="rarb" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 Z" fill="#1599B0"/></marker>
           <style>
-            .b{fill:#FFFFFF;stroke-width:1.5;rx:12}
-            .hw{stroke:#0CA678}
-            .hwfill{fill:#E3F7EF;stroke:#0CA678}
-            .sw{stroke:#4263EB}
-            .swfill{fill:#EAEFFE;stroke:#4263EB}
-            .out{fill:#FFF4E6;stroke:#F76707}
-            .t{fill:#11161B;font-size:13.5px;font-weight:600;font-family:"Sora",sans-serif}
-            .s{fill:#5B6B78;font-size:10.5px}
-            .zone{font-size:11px;font-weight:600;letter-spacing:.14em}
-            .flow{stroke:#3B5BDB;stroke-width:2;fill:none;marker-end:url(#ar)}
+            .rbx{fill:#FFFFFF;stroke:#CBD5DF;stroke-width:1.5}
+            .rmcu{fill:#FCEBDC;stroke:#F4791F;stroke-width:2}
+            .rsen{fill:#E0F6FB;stroke:#1599B0;stroke-width:1.7}
+            .ropt{fill:#F6F8FA;stroke:#9AA7B2;stroke-width:1.5;stroke-dasharray:6 5}
+            .rt{fill:#11161B;font-size:13px;font-weight:700;font-family:"Archivo",sans-serif}
+            .rs{fill:#5B6B78;font-size:10.5px}
+            .rpin{fill:#11161B;font-size:10px;font-weight:700}
+            .rsig{stroke:#F4791F;stroke-width:2.2;fill:none;marker-end:url(#rar)}
+            .rdat{stroke:#1599B0;stroke-width:2.2;fill:none;marker-end:url(#rarb)}
+            .rzone{font-size:11px;font-weight:700;letter-spacing:.12em}
+            .rsteel{fill:#AEB6BD;stroke:#8A97A3;stroke-width:1}
           </style>
         </defs>
 
-        <!-- zone labels -->
-        <text class="zone" x="40" y="34" fill="#0CA678">▸ HARDWARE (≈30%)</text>
-        <text class="zone" x="360" y="34" fill="#4263EB">▸ SOFTWARE · AI / ML (≈70%)</text>
-        <line x1="330" y1="50" x2="330" y2="430" stroke="#C7CFD8" stroke-width="1.5" stroke-dasharray="5 6"/>
+        <text class="rzone" x="30" y="34" fill="#C2540A">▸ PHYSICAL RIG</text>
 
-        <!-- HARDWARE column -->
-        <rect class="b hwfill" x="40" y="70" width="240" height="78" rx="12"/>
-        <text class="t" x="58" y="100">1 · Clip-on current sensor</text>
-        <text class="s" x="58" y="120">SCT-013 clamps the main wire,</text>
-        <text class="s" x="58" y="135">reads current (non-contact).</text>
+        <!-- baseplate -->
+        <rect class="rsteel" x="60" y="196" width="600" height="20" rx="3"/>
+        <text class="rs" x="60" y="236">rigid baseplate</text>
 
-        <rect class="b hwfill" x="40" y="178" width="240" height="78" rx="12"/>
-        <text class="t" x="58" y="208">2 · ESP32 board</text>
-        <text class="s" x="58" y="228">Samples fast, packages the</text>
-        <text class="s" x="58" y="243">numbers, sends over Wi-Fi.</text>
+        <!-- motor -->
+        <rect class="rbx" x="90" y="116" width="140" height="80" rx="10" fill="#FFF4E6" stroke="#F4791F"/>
+        <text class="rt" x="110" y="150">Motor</text>
+        <text class="rs" x="110" y="170">drives the shaft</text>
+        <!-- shaft -->
+        <rect class="rsteel" x="230" y="152" width="190" height="8" rx="4"/>
+        <!-- coupling -->
+        <rect class="rsteel" x="250" y="146" width="16" height="20" rx="2"/>
+        <text class="rs" x="238" y="138">coupling</text>
+        <!-- bearing block -->
+        <rect class="rbx" x="420" y="146" width="78" height="50" rx="6"/>
+        <text class="rt" x="430" y="176" font-size="11">Bearing</text>
+        <text class="rs" x="430" y="190" font-size="9.5">(swappable)</text>
+        <!-- flywheel / unbalance disc -->
+        <circle cx="560" cy="156" r="34" fill="#EEF2F5" stroke="#8A97A3" stroke-width="1.5"/>
+        <circle cx="560" cy="135" r="5" fill="#F4791F"/>
+        <text class="rs" x="600" y="150">disc with</text>
+        <text class="rs" x="600" y="164">off-centre weight</text>
+        <text class="rs" x="600" y="178">(imbalance fault)</text>
+        <rect class="rsteel" x="498" y="152" width="30" height="8" rx="4"/>
 
-        <rect class="b hwfill" x="40" y="286" width="240" height="78" rx="12"/>
-        <text class="t" x="58" y="316">3 · Log the stream</text>
-        <text class="s" x="58" y="336">Stored readings = your own</text>
-        <text class="s" x="58" y="351">real, labeled dataset.</text>
+        <!-- accelerometer on bearing -->
+        <rect class="rsen" x="430" y="108" width="58" height="30" rx="6"/>
+        <text class="rpin" x="438" y="127" fill="#0C5A6B">ACCEL</text>
+        <line x1="459" y1="138" x2="459" y2="146" stroke="#1599B0" stroke-width="2"/>
 
-        <path class="flow" d="M160,148 L160,176" stroke="#0CA678" marker-end="url(#ar)"/>
-        <path class="flow" d="M160,256 L160,284" stroke="#0CA678" marker-end="url(#ar)"/>
-        <!-- cross to software -->
-        <path class="flow" d="M280,325 L312,325 L312,150 L356,150"/>
+        <!-- current sensor on motor feed -->
+        <circle cx="96" cy="250" r="13" fill="none" stroke="#F4791F" stroke-width="5"/>
+        <line x1="96" y1="216" x2="96" y2="290" stroke="#AEB6BD" stroke-width="6"/>
+        <text class="rs" x="116" y="254">current sensor</text>
+        <text class="rs" x="116" y="268">on motor supply</text>
 
-        <!-- SOFTWARE column -->
-        <rect class="b swfill" x="356" y="112" width="250" height="76" rx="12"/>
-        <text class="t" x="374" y="140">4 · Clean &amp; window</text>
-        <text class="s" x="374" y="160">Slice the stream into chunks,</text>
-        <text class="s" x="374" y="175">smooth out spikes &amp; gaps.</text>
+        <!-- divider -->
+        <line x1="60" y1="300" x2="940" y2="300" stroke="#C7CFD8" stroke-width="1.5" stroke-dasharray="5 6"/>
+        <text class="rzone" x="30" y="332" fill="#1599B0">▸ SIGNAL CHAIN</text>
 
-        <rect class="b swfill" x="356" y="210" width="250" height="76" rx="12"/>
-        <text class="t" x="374" y="238">5 · Features (or raw)</text>
-        <text class="s" x="374" y="258">Power, on/off edges, harmonics</text>
-        <text class="s" x="374" y="273">— or feed raw chunks to a net.</text>
+        <!-- signal chain boxes -->
+        <rect class="rsen" x="60" y="356" width="190" height="74" rx="11"/>
+        <text class="rt" x="78" y="384">Accelerometer</text>
+        <text class="rs" x="78" y="404">vibration → digital</text>
+        <text class="rs" x="78" y="420">(I2C / SPI)</text>
 
-        <rect class="b swfill" x="356" y="308" width="250" height="86" rx="12"/>
-        <text class="t" x="374" y="336">6 · The ML model</text>
-        <text class="s" x="374" y="356">CNN / LSTM learns each</text>
-        <text class="s" x="374" y="371">appliance's fingerprint and</text>
-        <text class="s" x="374" y="386">disaggregates the signal.</text>
+        <rect class="rbx" x="60" y="452" width="190" height="64" rx="11" fill="#FFF4E6" stroke="#F4791F"/>
+        <text class="rt" x="78" y="478" font-size="12">Current sensor</text>
+        <text class="rs" x="78" y="498">analog → ADC</text>
 
-        <path class="flow" d="M481,188 L481,208"/>
-        <path class="flow" d="M481,286 L481,306"/>
-        <path class="flow" d="M606,351 L640,351 L640,150 L662,150"/>
-        <path class="flow" d="M606,351 L640,351 L640,250 L662,250"/>
+        <!-- MCU -->
+        <rect class="rmcu" x="380" y="386" width="210" height="96" rx="13"/>
+        <text class="rt" x="402" y="416">ESP32 / Arduino</text>
+        <text class="rs" x="402" y="436">+ fast ADC</text>
+        <text class="rs" x="402" y="454">samples both sensors</text>
+        <text class="rs" x="402" y="470">many times / second</text>
 
-        <!-- OUTPUTS -->
-        <rect class="b out" x="662" y="112" width="240" height="76" rx="12"/>
-        <text class="t" x="680" y="140" fill="#D9480F">Output A · Who's on</text>
-        <text class="s" x="680" y="160">"Fridge + AC running now."</text>
-        <text class="s" x="680" y="175">Appliance recognition.</text>
+        <path class="rdat" d="M250,393 C320,393 330,420 378,420"/>
+        <path class="rsig" d="M250,478 C320,478 330,452 378,452"/>
 
-        <rect class="b out" x="662" y="212" width="240" height="76" rx="12"/>
-        <text class="t" x="680" y="240" fill="#D9480F">Output B · What's next</text>
-        <text class="s" x="680" y="260">Forecast the coming load /</text>
-        <text class="s" x="680" y="275">flag unusual usage.</text>
+        <!-- laptop -->
+        <rect class="rbx" x="720" y="388" width="210" height="92" rx="13"/>
+        <text class="rt" x="742" y="416">Laptop / PC</text>
+        <text class="rs" x="742" y="436">logs labelled clips</text>
+        <text class="rs" x="742" y="452">as CSV (USB / Wi-Fi)</text>
+        <text class="rs" x="742" y="468">→ feeds the model</text>
+        <path class="rdat" d="M590,434 C650,434 668,434 718,434"/>
 
-        <!-- EVALUATE -->
-        <rect class="b" x="662" y="312" width="240" height="92" rx="12" stroke="#5B6B78"/>
-        <text class="t" x="680" y="340">7 · Evaluate</text>
-        <text class="s" x="680" y="360">Accuracy, F1, error vs known</text>
-        <text class="s" x="680" y="375">labels. Compare models — this</text>
-        <text class="s" x="680" y="390">comparison is your paper.</text>
-
-        <path class="flow" d="M782,188 L782,210"/>
-        <path class="flow" d="M782,288 L782,310"/>
+        <!-- legend -->
+        <g transform="translate(60,536)">
+          <line x1="0" y1="0" x2="34" y2="0" class="rdat"/><text class="rs" x="42" y="4">digital sensor data</text>
+          <line x1="220" y1="0" x2="254" y2="0" class="rsig"/><text class="rs" x="262" y="4">analog signal</text>
+          <rect x="430" y="-9" width="18" height="18" rx="4" class="ropt"/><text class="rs" x="456" y="4">optional</text>
+        </g>
       </svg>
     </div>
-
-    <div style="margin-top:18px;background:#F6F8FA;border:1px solid var(--line-lt);border-radius:12px;padding:18px">
-      <h3 style="margin-bottom:6px">Tools you'd use</h3>
-      <p class="muted" style="margin:0">Hardware: <span class="mono">SCT-013 clamp</span>, <span class="mono">ESP32</span>, jumper wires, a burden resistor. Software: <span class="mono">Python</span>, <span class="mono">pandas/NumPy</span> for the data, <span class="mono">scikit-learn</span> for classic models, <span class="mono">PyTorch / TensorFlow</span> for the CNN/LSTM. Public datasets <span class="mono">UK-DALE · REDD · AMPds</span> to boost training.</p>
+    <div class="legend">
+      <span><i style="background:#FFF4E6;border:1px solid var(--fault)"></i>Mechanical / motor</span>
+      <span><i style="background:#E0F6FB;border:1px solid #1599B0"></i>Sensors &amp; data</span>
+      <span><i style="background:#FCEBDC;border:1px solid var(--fault)"></i>Controller</span>
     </div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- ===== 05 SPLIT ===== -->
+<!-- 05 ML PIPELINE -->
 <section>
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">05 — The balance you asked for</span>
-      <h2>Has both parts — and tilts to software</h2>
-      <p class="muted">It satisfies a "hardware + software" requirement with a genuine working device, while keeping your effort and the project's originality on the AI/ML side.</p>
+      <span class="eyebrow">05 — The software</span>
+      <h2>From raw shaking to a named fault</h2>
+      <p class="muted">Once the rig produces labelled recordings, this is the AI half: turn the signal into something the model can read, train it, and check how well it tells the faults apart.</p>
+    </div>
+
+    <div class="diagram-scroll">
+      <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
+        <defs>
+          <marker id="mar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 Z" fill="#1599B0"/></marker>
+          <style>
+            .mbx{fill:#1A1F26;stroke:#2A313A;stroke-width:1.5}
+            .mmodel{fill:#0d1014;stroke:#F4791F;stroke-width:2}
+            .mout{fill:#11161B;stroke:#1FB8D4;stroke-width:2}
+            .mt{fill:#EAEFF4;font-size:13px;font-weight:700;font-family:"Archivo",sans-serif}
+            .ms{fill:#94A1AD;font-size:10px}
+            .mstep{font-size:10px;font-weight:700;letter-spacing:.06em;fill:#1FB8D4}
+            .mflow{stroke:#1599B0;stroke-width:2;fill:none;marker-end:url(#mar)}
+          </style>
+        </defs>
+        <rect class="mbx" x="20" y="100" width="170" height="96" rx="12"/>
+        <text class="mstep" x="36" y="124">STEP 1</text>
+        <text class="mt" x="36" y="146">Raw signals</text>
+        <text class="ms" x="36" y="166">vibration + current</text>
+        <text class="ms" x="36" y="182">from the rig</text>
+
+        <rect class="mbx" x="220" y="100" width="170" height="96" rx="12"/>
+        <text class="mstep" x="236" y="124">STEP 2</text>
+        <text class="mt" x="236" y="146">Window it</text>
+        <text class="ms" x="236" y="166">slice into short,</text>
+        <text class="ms" x="236" y="182">equal segments</text>
+
+        <rect class="mbx" x="420" y="100" width="180" height="96" rx="12"/>
+        <text class="mstep" x="436" y="124">STEP 3</text>
+        <text class="mt" x="436" y="146">Transform</text>
+        <text class="ms" x="436" y="166">FFT / spectrogram</text>
+        <text class="ms" x="436" y="182">or key features</text>
+
+        <rect class="mmodel" x="630" y="92" width="180" height="112" rx="12"/>
+        <text class="mstep" x="646" y="116" fill="#F4791F">STEP 4 · MODEL</text>
+        <text class="mt" x="646" y="140">CNN on images</text>
+        <text class="ms" x="646" y="160">or SVM / Random</text>
+        <text class="ms" x="646" y="176">Forest on features</text>
+        <text class="ms" x="646" y="192">— learns each fault</text>
+
+        <rect class="mout" x="840" y="92" width="140" height="112" rx="12"/>
+        <text class="mstep" x="856" y="116">RESULT</text>
+        <text class="mt" x="856" y="140" font-size="12">Healthy /</text>
+        <text class="mt" x="856" y="158" font-size="12">Bearing /</text>
+        <text class="mt" x="856" y="176" font-size="12">Imbalance /</text>
+        <text class="mt" x="856" y="194" font-size="12">Misalign</text>
+
+        <path class="mflow" d="M190,148 L218,148"/>
+        <path class="mflow" d="M390,148 L418,148"/>
+        <path class="mflow" d="M600,148 L628,148"/>
+        <path class="mflow" d="M810,148 L838,148"/>
+
+        <rect class="mbx" x="420" y="232" width="180" height="50" rx="11"/>
+        <text class="mstep" x="436" y="254">STEP 5 · EVALUATE</text>
+        <text class="ms" x="436" y="272">accuracy · confusion matrix</text>
+        <path class="mflow" d="M720,204 L720,257 L602,257"/>
+      </svg>
+    </div>
+    <div class="split" style="margin-top:18px">
+      <h3 style="font-size:1rem;margin-bottom:6px">Tools</h3>
+      <p class="muted mono" style="font-size:.82rem;margin:0">Python · NumPy / SciPy (FFT, spectrograms) · scikit-learn (SVM, Random Forest) · PyTorch or TensorFlow (CNN) · matplotlib for the plots. Firmware in the Arduino IDE for the ESP32.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 06 BALANCE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">06 — The balance you asked for</span>
+      <h2>Now it leans to hardware</h2>
+      <p class="muted">Building and instrumenting a real spinning rig, inducing faults, and collecting clean data is substantial physical work — so this sits a little over half on the hardware side, with a solid AI core on the software side.</p>
     </div>
     <div class="split">
       <div class="splitbar">
-        <div class="hwseg">HARDWARE</div>
-        <div class="swseg">SOFTWARE · AI / ML</div>
+        <div class="hwseg">HARDWARE · RIG</div>
+        <div class="swseg">SOFTWARE · AI/ML</div>
       </div>
-      <div class="split-cap"><span>≈ 30% — build &amp; collect</span><span>≈ 70% — model &amp; analysis →</span></div>
+      <div class="split-cap"><span>≈ 55% — build rig, instrument, induce faults, collect</span><span>≈ 45% — features, model, evaluate →</span></div>
       <div class="split-cols">
         <div>
-          <h3 style="color:#0CA678">Hardware (small)</h3>
+          <h3 style="color:#F4791F">Hardware (the bigger half)</h3>
           <ul>
-            <li>Assemble clamp + ESP32</li>
-            <li>Calibrate &amp; log readings</li>
-            <li>Run controlled on/off sessions to label data</li>
+            <li>Assemble motor, shaft, bearing, baseplate</li>
+            <li>Mount accelerometer + current sensor</li>
+            <li>Wire and program the ESP32/DAQ</li>
+            <li>Induce faults &amp; run data-collection sessions</li>
           </ul>
         </div>
         <div>
-          <h3 style="color:#4263EB">Software (the bulk)</h3>
+          <h3 style="color:#1599B0">Software (the AI core)</h3>
           <ul>
-            <li>Preprocess &amp; window the signal</li>
-            <li>Design + train CNN/LSTM models</li>
-            <li>Disaggregate, forecast, evaluate, compare</li>
+            <li>Window &amp; transform the signals (FFT/spectrogram)</li>
+            <li>Train CNN / SVM / Random Forest</li>
+            <li>Evaluate, compare, validate on a public dataset</li>
             <li>Write the paper around the results</li>
           </ul>
         </div>
@@ -430,262 +500,99 @@
 
 <hr class="divider">
 
-<!-- ===== 06 WHY ===== -->
+<!-- 07 WHY -->
 <section>
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">06 — Why it's a smart pick</span>
-      <h2>Low risk, real device, clear paper</h2>
+      <span class="eyebrow">07 — Why it's a smart pick</span>
+      <h2>Hands-on, clearly EE, and publishable</h2>
     </div>
     <div class="reasons">
-      <div class="reason">
-        <span class="num">// 01</span>
-        <h3>The device makes your data</h3>
-        <p>No begging a utility for records. You switch appliances on and off, and the rig produces real, labeled data — and public datasets fill any gaps.</p>
-      </div>
-      <div class="reason">
-        <span class="num">// 02</span>
-        <h3>Safe, cheap, available</h3>
-        <p>A non-contact clamp and an ESP32 are inexpensive, sold locally, and well-documented — so the hardware won't derail your timeline.</p>
-      </div>
-      <div class="reason">
-        <span class="num">// 03</span>
-        <h3>A paper sits inside it</h3>
-        <p>Appliance recognition accuracy, load forecasting, or anomaly detection — each is a recognized NILM theme that fits a student conference.</p>
-      </div>
+      <div class="reason"><span class="num">// 01</span><h3>A real machine to build</h3><p>You design, assemble, and instrument an actual rotating rig — substantial, demonstrable hardware that examiners can see run.</p></div>
+      <div class="reason"><span class="num">// 02</span><h3>You make your own data</h3><p>Inducing faults gives you real, labelled recordings — and a strong public dataset (CWRU) lets you benchmark and fill gaps.</p></div>
+      <div class="reason"><span class="num">// 03</span><h3>Unmistakably electrical</h3><p>Vibration sensing, motor-current analysis, signal processing, and ML — squarely in the EE/condition-monitoring space.</p></div>
+      <div class="reason"><span class="num">// 04</span><h3>A clear paper</h3><p>Compare features vs spectrogram-CNN, or rig data vs the public benchmark — recognised condition-monitoring themes.</p></div>
     </div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- ===== 07 HARDWARE IN DETAIL (light) ===== -->
+<!-- 08 DATA -->
 <section class="light-sec">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">07 — Hardware in detail</span>
-      <h2>Exact parts, and how they wire together</h2>
-      <p class="muted">Everything below is cheap, sold in Kathmandu electronics shops, and beginner-friendly. The core build is just three things: the clamp, a small bias circuit, and the ESP32. The voltage sensor and SD card are optional add-ons.</p>
+      <span class="eyebrow">08 — Where the data comes from</span>
+      <h2>Your rig, backed by public datasets</h2>
+      <p class="muted">You don't rely only on your rig. The field has excellent, free, labelled datasets used in most papers — perfect for training and for benchmarking your own results.</p>
     </div>
-
     <div class="hw-grid">
       <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 10 0V4"/><circle cx="12" cy="17" r="3"/></svg></div>
-        <h3>SCT-013-030 current clamp</h3>
-        <p>Clips around one insulated wire and outputs a small AC voltage (0–1 V). Core sensor.</p>
-        <span class="pill">qty 1 · core</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Your own rig data</h3>
+        <p>Record healthy and each induced-fault condition. Because you set the fault, every clip is automatically labelled.</p>
       </div>
       <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
-        <h3>ESP32 DevKit board</h3>
-        <p>Reads the sensor on its ADC pins and logs over USB or Wi-Fi. The brain of the rig.</p>
-        <span class="pill">qty 1 · core</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 10h16"/></svg></div>
+        <h3>CWRU Bearing dataset</h3>
+        <p>The classic Case Western Reserve University bearing data — the standard benchmark for this kind of work.</p>
       </div>
       <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h3l2-5 4 10 2-5h3"/></svg></div>
-        <h3>2 × 10 kΩ resistors</h3>
-        <p>Form a divider that lifts the sensor signal to mid-voltage so the ADC can read it.</p>
-        <span class="pill">qty 2 · core</span>
-      </div>
-      <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M10 4v16M14 4v16M3 12h7M14 12h7"/></svg></div>
-        <h3>10 µF capacitor</h3>
-        <p>Steadies that mid-voltage reference point so the readings stay clean.</p>
-        <span class="pill">qty 1 · core</span>
-      </div>
-      <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></div>
-        <h3>Breadboard + jumper wires</h3>
-        <p>Holds the bias circuit and connects everything without soldering.</p>
-        <span class="pill">qty 1 set · core</span>
-      </div>
-      <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4z"/><path d="M8 7V4h8v3"/></svg></div>
-        <h3>ZMPT101B voltage module</h3>
-        <p>Add only if you want true power in watts (not just current). Has its own bias + trimmer.</p>
-        <span class="pill">optional</span>
-      </div>
-      <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5"/></svg></div>
-        <h3>microSD card module</h3>
-        <p>For logging offline to a card instead of streaming to a laptop. Connects over SPI.</p>
-        <span class="pill">optional</span>
-      </div>
-      <div class="hw">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v14M12 17a3 3 0 0 0 3-3V9M9 7l3-4 3 4"/></svg></div>
-        <h3>USB cable / 5 V supply</h3>
-        <p>Powers the ESP32 and carries the data stream to your computer.</p>
-        <span class="pill">qty 1 · core</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M9 9h6v6H9z"/></svg></div>
+        <h3>Paderborn &amp; MAFAULDA</h3>
+        <p>Additional public machinery-fault datasets to broaden training and test how well your model generalises.</p>
       </div>
     </div>
-
-    <h3 style="margin-top:30px">Wiring diagram</h3>
-    <div class="diagram-scroll">
-      <svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
-        <defs>
-          <marker id="kar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L6,3 L0,6 Z" fill="#F76707"/>
-          </marker>
-          <style>
-            .kbx{fill:#FFFFFF;stroke:#CBD5DF;stroke-width:1.5}
-            .kchip{fill:#EAEFFE;stroke:#4263EB;stroke-width:2}
-            .kam{fill:#FFF4E6;stroke:#F76707;stroke-width:1.5}
-            .kopt{fill:#F6F8FA;stroke:#9AA7B2;stroke-width:1.5;stroke-dasharray:6 5}
-            .ktt{fill:#11161B;font-size:13px;font-weight:600;font-family:"Sora",sans-serif}
-            .kss{fill:#5B6B78;font-size:10.5px}
-            .kpin{fill:#11161B;font-size:10.5px;font-weight:600}
-            .ksig{stroke:#F76707;stroke-width:2.2;fill:none;marker-end:url(#kar)}
-            .kpwr{stroke:#9AA7B2;stroke-width:1.5;fill:none;stroke-dasharray:4 4}
-            .knode{fill:#F76707}
-            .kzone{font-size:11px;font-weight:600;letter-spacing:.12em}
-          </style>
-        </defs>
-
-        <!-- mains wire + clamp -->
-        <text class="kzone" x="24" y="40" fill="#F76707">▸ MAINS</text>
-        <rect x="40" y="56" width="13" height="250" rx="3" fill="#AEB6BD"/>
-        <text class="kss" x="20" y="324">live wire</text>
-        <circle cx="46" cy="150" r="24" fill="none" stroke="#F76707" stroke-width="6"/>
-        <rect x="14" y="140" width="20" height="20" rx="3" class="kam"/>
-        <text class="kpin" x="70" y="150">SCT-013-030</text>
-        <text class="kss" x="70" y="166">clips around wire</text>
-
-        <!-- clamp -> bias -->
-        <path class="ksig" d="M70,150 C120,150 130,250 168,250"/>
-        <text class="kss" x="92" y="205">AC out</text>
-
-        <!-- bias network -->
-        <rect class="kbx" x="170" y="206" width="190" height="92" rx="12"/>
-        <text class="ktt" x="188" y="232">Bias network</text>
-        <text class="kss" x="188" y="252">2 × 10 kΩ + 10 µF</text>
-        <text class="kss" x="188" y="268">centres signal</text>
-        <text class="kss" x="188" y="284">at ≈ 1.65 V</text>
-
-        <!-- bias -> ESP32 GPIO34 -->
-        <path class="ksig" d="M360,240 C420,240 430,210 470,210"/>
-
-        <!-- ESP32 -->
-        <rect class="kchip" x="470" y="150" width="220" height="240" rx="14"/>
-        <text class="ktt" x="492" y="180">ESP32 DevKit</text>
-        <text class="kss" x="492" y="198">samples ADC + Wi-Fi</text>
-        <!-- pin rows -->
-        <circle class="knode" cx="474" cy="210" r="3"/><text class="kpin" x="500" y="214">GPIO34  ← current signal</text>
-        <circle class="knode" cx="474" cy="260" r="3"/><text class="kpin" x="500" y="264">GPIO35  ← voltage (optional)</text>
-        <circle cx="474" cy="300" r="3" fill="#9AA7B2"/><text class="kpin" x="500" y="304" fill="#5B6B78">3V3 / GND → sensors</text>
-        <circle cx="474" cy="340" r="3" fill="#4263EB"/><text class="kpin" x="500" y="344" fill="#3B5BDB">USB / Wi-Fi → computer</text>
-        <text class="kss" x="500" y="372">SD (opt): CS5 · SCK18 · MOSI23 · MISO19</text>
-
-        <!-- ZMPT optional -->
-        <rect class="kopt" x="170" y="356" width="190" height="92" rx="12"/>
-        <text class="ktt" x="188" y="382">ZMPT101B</text>
-        <text class="kss" x="188" y="400">optional · true watts</text>
-        <text class="kss" x="188" y="416">measures mains voltage</text>
-        <text class="kss" x="188" y="432">OUT → GPIO35</text>
-        <path class="ksig" d="M360,402 C415,402 430,260 470,260"/>
-
-        <!-- power rails from ESP32 to sensors -->
-        <path class="kpwr" d="M470,300 C430,300 420,272 362,272"/>
-        <path class="kpwr" d="M470,310 C430,330 420,420 362,420"/>
-        <text class="kss" x="392" y="318" fill="#9AA7B2">3V3 / GND</text>
-
-        <!-- laptop -->
-        <rect class="kbx" x="760" y="190" width="210" height="92" rx="12"/>
-        <text class="ktt" x="780" y="218">Laptop / PC</text>
-        <text class="kss" x="780" y="238">logs readings as CSV</text>
-        <text class="kss" x="780" y="254">(USB serial or Wi-Fi)</text>
-        <path class="ksig" d="M690,300 C720,300 728,236 758,236" marker-end="url(#kar)" stroke="#4263EB"/>
-
-        <!-- SD optional -->
-        <rect class="kopt" x="760" y="318" width="210" height="78" rx="12"/>
-        <text class="ktt" x="780" y="344">microSD module</text>
-        <text class="kss" x="780" y="362">optional offline logging</text>
-        <text class="kss" x="780" y="378">SPI · 4 data pins + power</text>
-        <path class="kpwr" d="M690,360 C720,360 730,356 758,356"/>
-
-        <!-- legend -->
-        <g transform="translate(40,490)">
-          <line x1="0" y1="0" x2="34" y2="0" class="ksig"/><text class="kss" x="42" y="4">signal wire</text>
-          <line x1="170" y1="0" x2="204" y2="0" class="kpwr"/><text class="kss" x="212" y="4">power (3V3 / GND)</text>
-          <rect x="360" y="-9" width="18" height="18" rx="4" class="kopt"/><text class="kss" x="386" y="4">optional part</text>
-        </g>
-      </svg>
-    </div>
-
-    <div class="split" style="margin-top:18px">
-      <h3 style="font-size:1rem;margin-bottom:10px">Connection list (the core build)</h3>
-      <div class="split-cols">
-        <div>
-          <h3 style="color:#F76707;font-size:.92rem">Current sensing</h3>
-          <ul>
-            <li>3V3 → 10 kΩ → mid-point → 10 kΩ → GND</li>
-            <li>10 µF capacitor across mid-point and GND</li>
-            <li>Clamp lead 1 → mid-point (bias)</li>
-            <li>Clamp lead 2 → ESP32 GPIO34 (ADC)</li>
-          </ul>
-        </div>
-        <div>
-          <h3 style="color:#4263EB;font-size:.92rem">Voltage (optional) &amp; power</h3>
-          <ul>
-            <li>ZMPT101B: VCC → 3V3, GND → GND</li>
-            <li>ZMPT101B: OUT → ESP32 GPIO35 (ADC)</li>
-            <li>ESP32: powered &amp; read over USB to laptop</li>
-            <li>microSD (optional): CS 5, SCK 18, MOSI 23, MISO 19</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="safe"><b>Before you wire it:</b> the clamp signal must be biased to mid-rail (the 2×10 kΩ + capacitor) or the ESP32's ADC can't read the negative half of the wave. Calibrate the readings against a known load (e.g. a labelled bulb), and set anything near mains up <b>with your supervisor's guidance</b>. The ESP32 ADC is non-linear at the extremes, so keep the signal comfortably within 0–3.3 V.</div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- ===== 08 REFERENCES ===== -->
+<!-- 09 REFERENCES -->
 <section>
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">08 — What to read</span>
+      <span class="eyebrow">09 — What to read</span>
       <h2>References to get you started</h2>
-      <p class="muted">A short, high-value reading list. Start with Hart's foundational paper and the NILMTK toolkit, then move to the deep-learning methods and pick a dataset. Find the newest survey through your library or Google Scholar to cite current work.</p>
+      <p class="muted">Begin with the bearing-diagnostics tutorial and the CWRU benchmark, then the ML review, then a CNN method paper. Confirm exact details and find the newest survey through your library or Google Scholar.</p>
     </div>
     <div class="reasons">
       <div class="reason">
         <span class="num">// foundations</span>
         <h3>Start here</h3>
         <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
-          <li>G. W. Hart, "Nonintrusive Appliance Load Monitoring," <i>Proc. IEEE</i>, 1992 — the paper that defined NILM.</li>
-          <li>A recent NILM review (search "non-intrusive load monitoring deep learning review", 2020+) for the current landscape.</li>
+          <li>Randall &amp; Antoni, "Rolling element bearing diagnostics — A tutorial," <i>MSSP</i>, 2011.</li>
+          <li>Smith &amp; Randall, "Bearing diagnostics using the CWRU data: a benchmark study," <i>MSSP</i>, 2015.</li>
         </ul>
       </div>
       <div class="reason">
         <span class="num">// methods</span>
-        <h3>Deep-learning NILM</h3>
+        <h3>Machine learning</h3>
         <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
-          <li>Kelly &amp; Knottenbelt, "Neural NILM," <i>ACM BuildSys</i>, 2015.</li>
-          <li>Zhang et al., "Sequence-to-Point Learning for Non-Intrusive Load Monitoring," <i>AAAI</i>, 2018.</li>
+          <li>Lei et al., "Machine learning for machine fault diagnosis: a review and roadmap," <i>MSSP</i>, 2020.</li>
+          <li>Janssens et al., "CNN-based fault detection for rotating machinery," <i>J. Sound &amp; Vibration</i>, 2016.</li>
         </ul>
       </div>
       <div class="reason">
         <span class="num">// data</span>
-        <h3>Public datasets</h3>
+        <h3>Datasets</h3>
         <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
-          <li>Kolter &amp; Johnson, "REDD," <i>SustKDD</i>, 2011.</li>
-          <li>Kelly &amp; Knottenbelt, "UK-DALE," <i>Scientific Data</i>, 2015.</li>
-          <li>Makonin et al., "AMPds2," 2016.</li>
+          <li>CWRU Bearing Data Center (Case Western Reserve University).</li>
+          <li>Lessmeier et al., Paderborn bearing dataset, PHM Europe, 2016.</li>
+          <li>MAFAULDA — Machinery Fault Database (UFRJ).</li>
         </ul>
       </div>
       <div class="reason">
         <span class="num">// hands-on</span>
-        <h3>Tools &amp; hardware</h3>
+        <h3>Hardware &amp; standards</h3>
         <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink);font-size:.9rem">
-          <li>Batra et al., "NILMTK: An Open Source Toolkit," <i>ACM e-Energy</i>, 2014 — code: github.com/nilmtk/nilmtk.</li>
-          <li>OpenEnergyMonitor docs (openenergymonitor.org) — CT-sensor + ESP32/Arduino measurement and calibration (emonlib).</li>
-          <li>Espressif ESP32 ADC guide — how to sample the analog signal reliably.</li>
+          <li>ISO 20816 / 10816 — mechanical vibration evaluation (severity limits).</li>
+          <li>ADXL345 / MPU6050 datasheets + accelerometer mounting guidance.</li>
+          <li>ESP32 ADC + I2C sampling guides for reliable acquisition.</li>
         </ul>
       </div>
     </div>
-    <p class="muted" style="font-size:.84rem;margin-top:16px">Citations are starting points — confirm exact details and find the latest sources through your campus library or Google Scholar before citing in your report.</p>
+    <p class="muted" style="font-size:.84rem;margin-top:16px">Citations are starting points — verify authors, years, and details, and search for the latest survey before citing in your report.</p>
   </div>
 </section>
 
@@ -693,8 +600,8 @@
 
 <footer>
   <div class="wrap">
-    <p style="margin:0 0 6px"><b>Smart Energy Meter with AI-based Appliance Recognition (NILM)</b> — a hardware-plus-software final-year project weighted toward AI/ML.</p>
-    <p class="mono" style="margin:0">Suggested next step: a full IOE-format proposal — objectives, scope, hardware block, ML methodology, data plan, timeline, expected outcomes.</p>
+    <p style="margin:0 0 6px"><b>Motor Fault Detection using Vibration &amp; Machine Learning</b> — a hardware-leaning final-year project with a real test rig and an AI diagnostic core.</p>
+    <p class="mono" style="margin:0">Suggested next step: a full IOE-format proposal — objectives, scope, rig design, ML methodology, data plan, timeline, expected outcomes.</p>
   </div>
 </footer>
 
