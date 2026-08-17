@@ -2,7 +2,7 @@
 title: Prajna
 description: A book rendered from Wisdom!
 baseurl: ""
-url: ""
+url: "https://prajna.sumityadav.com.np"
 
 # Build settings
 markdown: kramdown
