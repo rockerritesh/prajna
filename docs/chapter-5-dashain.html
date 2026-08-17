@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#f5f5f0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Chapter 5: Dashain - Prajna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light mode (default) */
+            --bg-primary: #f5f5f0;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f9f9f7;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #333333;
+            --border-light: #dddddd;
+            --link-color: #8b4513;
+            --link-hover: #5d2f0d;
+            --code-bg: #f4f4f4;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #8b4513;
+            --page-texture: linear-gradient(to right, rgba(0,0,0,0.02) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.02) 100%);
+        }
+
+        /* Night mode - warm sepia tones for comfortable reading */
+        [data-theme="night"] {
+            --bg-primary: #2c2416;
+            --bg-secondary: #3d3226;
+            --bg-tertiary: #4a3f32;
+            --text-primary: #e8dcc8;
+            --text-secondary: #d4c8b4;
+            --text-muted: #a89880;
+            --border-color: #7a6a52;
+            --border-light: #5a4a3a;
+            --link-color: #d4a574;
+            --link-hover: #e8c9a0;
+            --code-bg: #4a3f32;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --accent-color: #d4a574;
+            --page-texture: linear-gradient(to right, rgba(0,0,0,0.05) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.05) 100%);
+        }
+
+        /* Dark mode - true dark for AMOLED screens */
+        [data-theme="dark"] {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #252525;
+            --text-primary: #e5e5e5;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --border-color: #444444;
+            --border-light: #333333;
+            --link-color: #6db3f2;
+            --link-hover: #8cc4f7;
+            --code-bg: #252525;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --accent-color: #6db3f2;
+            --page-texture: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 0;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--link-color));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Top Toolbar */
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 999;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .toolbar.hidden {
+            transform: translateY(-100%);
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .home-link:hover {
+            color: var(--accent-color);
+        }
+
+        .toolbar-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+        }
+
+        .toolbar-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+        }
+
+        .toolbar-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Font Size Controls */
+        .font-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .font-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .font-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+        }
+
+        /* Theme Selector Dropdown */
+        .theme-selector {
+            position: relative;
+        }
+
+        .theme-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            display: none;
+            min-width: 160px;
+            z-index: 1001;
+        }
+
+        .theme-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .theme-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .theme-option.active {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+        }
+
+        .theme-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-icon.light {
+            background: linear-gradient(135deg, #fff9e6, #f5f5f0);
+            border: 1px solid #ddd;
+        }
+
+        .theme-icon.night {
+            background: linear-gradient(135deg, #4a3f32, #2c2416);
+            border: 1px solid #7a6a52;
+        }
+
+        .theme-icon.dark {
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #444;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Book Container with page effects */
+        .book-wrapper {
+            margin-top: 60px;
+            padding: 20px;
+            perspective: 2000px;
+        }
+
+        .book-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            padding: 60px 80px;
+            box-shadow: 
+                0 0 20px var(--shadow-color),
+                inset 0 0 60px rgba(0,0,0,0.02);
+            min-height: calc(100vh - 100px);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Book spine shadow effect */
+        .book-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0.1) 0%,
+                rgba(0,0,0,0.05) 30%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+
+        /* Page texture effect */
+        .book-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--page-texture);
+            pointer-events: none;
+        }
+        
+        .book-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        /* Decorative header ornament */
+        .book-header::after {
+            content: '❧';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0 15px;
+        }
+        
+        .book-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+        }
+        
+        .post-meta {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        /* Bookmark button */
+        .bookmark-btn {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .bookmark-btn:hover,
+        .bookmark-btn.bookmarked {
+            color: var(--accent-color);
+        }
+
+        .bookmark-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+        
+        .post-content {
+            font-size: 1.1em;
+            text-align: justify;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .post-content h1,
+        .post-content h2,
+        .post-content h3,
+        .post-content h4,
+        .post-content h5,
+        .post-content h6 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            text-align: left;
+        }
+        
+        .post-content h1 {
+            font-size: 1.9em;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 15px;
+        }
+        
+        .post-content h2 {
+            font-size: 1.5em;
+        }
+        
+        .post-content h3 {
+            font-size: 1.25em;
+        }
+        
+        .post-content p {
+            margin-bottom: 1.5em;
+            text-indent: 1.5em;
+        }
+
+        .post-content p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Drop cap for first paragraph */
+        .post-content p:first-of-type::first-letter {
+            float: left;
+            font-size: 3.5em;
+            line-height: 0.8;
+            padding-right: 10px;
+            padding-top: 5px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        .post-content ul,
+        .post-content ol {
+            margin: 1.5em 0 1.5em 2em;
+        }
+        
+        .post-content li {
+            margin-bottom: 0.75em;
+            text-align: left;
+        }
+        
+        .post-content code {
+            background: var(--code-bg);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .post-content pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2em 0;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 25px;
+            margin: 2em 0;
+            font-style: italic;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--link-color);
+            transition: all 0.2s ease;
+        }
+        
+        .post-content a:hover {
+            color: var(--link-hover);
+            border-bottom-color: var(--link-hover);
+        }
+        
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 2em auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2em 0;
+        }
+
+        .post-content th,
+        .post-content td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .post-content th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .post-content tr:nth-child(even) {
+            background: var(--bg-tertiary);
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border-light);
+            gap: 20px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .nav-btn.prev {
+            justify-content: flex-start;
+        }
+
+        .nav-btn.next {
+            justify-content: flex-end;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Footer */
+        .book-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .book-footer::before {
+            content: '✦';
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--accent-color);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .book-container {
+                padding: 50px 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+
+            .toolbar {
+                height: 56px;
+                padding: 0 15px;
+            }
+
+            .toolbar-btn {
+                padding: 8px 10px;
+                min-width: 38px;
+                min-height: 38px;
+            }
+
+            .font-controls {
+                display: none;
+            }
+
+            .book-wrapper {
+                padding: 10px;
+                margin-top: 56px;
+            }
+
+            .book-container {
+                padding: 35px 25px;
+                border-radius: 0;
+                min-height: calc(100vh - 76px);
+            }
+
+            .book-container::before {
+                width: 15px;
+            }
+            
+            .book-title {
+                font-size: 1.6em;
+                line-height: 1.25;
+            }
+
+            .book-header {
+                margin-bottom: 35px;
+                padding-bottom: 25px;
+            }
+
+            .book-header::after {
+                font-size: 20px;
+            }
+            
+            .post-content {
+                font-size: 1em;
+                text-align: left;
+                hyphens: none;
+            }
+
+            .post-content p {
+                text-indent: 0;
+                margin-bottom: 1.25em;
+            }
+
+            .post-content p:first-of-type::first-letter {
+                font-size: 2.8em;
+            }
+
+            .post-content h1 {
+                font-size: 1.5em;
+            }
+
+            .post-content h2 {
+                font-size: 1.3em;
+            }
+
+            .post-content h3 {
+                font-size: 1.15em;
+            }
+
+            .post-content ul,
+            .post-content ol {
+                margin-left: 1.5em;
+            }
+
+            .post-content pre {
+                padding: 15px;
+                margin: 1.5em -10px;
+                border-radius: 0;
+            }
+
+            .post-content blockquote {
+                margin: 1.5em -10px;
+                padding: 12px 20px;
+            }
+
+            .chapter-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .bookmark-btn {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+
+            .toolbar {
+                height: 52px;
+                padding: 0 12px;
+            }
+
+            .home-link span {
+                display: none;
+            }
+
+            .book-wrapper {
+                padding: 5px;
+                margin-top: 52px;
+            }
+
+            .book-container {
+                padding: 25px 18px;
+            }
+
+            .book-title {
+                font-size: 1.4em;
+            }
+
+            .post-content p:first-of-type::first-letter {
+                font-size: 2.4em;
+                padding-right: 8px;
+            }
+
+            .post-meta {
+                font-size: 0.85em;
+            }
+        }
+        
+        @media print {
+            .toolbar,
+            .reading-progress,
+            .chapter-nav,
+            .bookmark-btn {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: #000;
+            }
+
+            .book-wrapper {
+                margin-top: 0;
+                padding: 0;
+            }
+            
+            .book-container {
+                box-shadow: none;
+                padding: 0;
+                max-width: none;
+            }
+
+            .book-container::before,
+            .book-container::after {
+                display: none;
+            }
+        }
+
+        /* Smooth transitions for theme changes */
+        .book-container,
+        .toolbar,
+        .toolbar-btn,
+        .theme-dropdown {
+            transition: background-color 0.3s ease, 
+                        border-color 0.3s ease, 
+                        color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .toolbar-btn,
+            .font-btn,
+            .nav-btn,
+            .theme-option {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            .post-content a {
+                padding: 2px 0;
+            }
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- Toolbar -->
+    <nav class="toolbar" id="toolbar">
+        <div class="toolbar-left">
+            <a href="index.html" class="home-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                </svg>
+                <span>Prajna</span>
+            </a>
+        </div>
+        <div class="toolbar-right">
+            <!-- Font Size Controls -->
+            <div class="font-controls">
+                <button class="font-btn" onclick="adjustFontSize(-1)" title="Decrease font size">A-</button>
+                <button class="font-btn" onclick="adjustFontSize(1)" title="Increase font size">A+</button>
+            </div>
+
+            <!-- Theme Selector -->
+            <div class="theme-selector">
+                <button class="toolbar-btn" id="themeBtn" onclick="toggleThemeDropdown()" title="Change theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <div class="theme-dropdown" id="themeDropdown">
+                    <div class="theme-option" data-theme="light" onclick="setTheme('light')">
+                        <div class="theme-icon light"></div>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="night" onclick="setTheme('night')">
+                        <div class="theme-icon night"></div>
+                        <span>Night</span>
+                    </div>
+                    <div class="theme-option" data-theme="dark" onclick="setTheme('dark')">
+                        <div class="theme-icon dark"></div>
+                        <span>Dark</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="book-wrapper">
+        <div class="book-container">
+            <div class="book-header">
+                <!-- Bookmark Button -->
+                <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()" title="Bookmark this page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <h1 class="book-title">Chapter 5: Dashain</h1>
+                <div class="post-meta">
+                    Published on 2021-10-07
+                     by Sumit Yadav [Rocker Ritesh]
+                </div>
+            </div>
+            <article class="post-content">
+                <h1 id="dashain-nine-forms-of-goddess-durga">Dashain : Nine Forms of Goddess Durga</h1>
+<div style="text-align: center; background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; padding: 40px; border-radius: 20px; margin: 20px 0;"> <h2 style="margin: 0 0 20px 0; font-size: 2.5em;">🕉️ One of the Biggest Festival, Hindus Celebrate 🕉️</h2> <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Aum_Om_black.svg?width=300" alt="OM" style="width: 150px; height: 150px; margin: 20px auto; filter: invert(1);"> </div>
+<div style="background: linear-gradient(135deg, #ff9a9e, #fecfef); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+Day 1 - Maa Shailaputri 🌸
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;"> <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <table style="width: 100%; border-collapse: collapse;"> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Name</td><td style="padding: 8px;">Shailaputri</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Meaning</td><td style="padding: 8px;">Daughter of <em>Mountain</em></td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Father and Mother</td><td style="padding: 8px;">Himavan and Menavati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Husband</td><td style="padding: 8px;">Lord Shiva</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Reincarnation</td><td style="padding: 8px;">Sati (Parvati)</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Chakra</td><td style="padding: 8px;">Root Chakra (Muladhara)</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Mount (Vahan)</td><td style="padding: 8px;">Nandi Bull</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Colour</td><td style="padding: 8px; background: #ffd700; color: #333;">Yellow</td></tr> </table> </div> <div style="text-align: center;"> <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shailaputri_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Shailaputri" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"> </div> </div> <div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <h4 style="color: #e74c3c; margin-bottom: 15px;">🙏 Mantra</h4> <p style="font-size: 18px; color: #8e44ad; text-align: center; margin: 15px 0;"><strong>ॐ देवी शैलपुत्र्यै नमः॥</strong><br><strong>Om Devi Shailaputryai Namah ।</strong></p> <h4 style="color: #e74c3c; margin: 20px 0 15px 0;">📿 Prayer</h4> <p style="font-size: 16px; color: #8e44ad; text-align: center; line-height: 1.6;"><strong>वन्दे वाञ्छितलाभाय चन्द्रार्ध कृतशेखराम् ॥<br>वृषारूढाम् शूलधराम् शैलपुत्रीम् यशस्विनीम् ।<br>या देवी सर्वभू‍तेषु माँ शैलपुत्री रूपेण संस्थिता ।<br>नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः ॥</strong></p> <h4 style="color: #e74c3c; margin: 20px 0 15px 0;">🌟 Description</h4> <p style="font-size: 16px; line-height: 1.6;">Portrayed with a half-moon on her forehead. A Trident in her right hand along with a lotus in her left hand. She is seen as riding on the back of a bull.</p> <h4 style="color: #e74c3c; margin: 20px 0 15px 0;">🪔 Worship</h4> <p style="font-size: 16px; line-height: 1.6;">On Partipada Tithi, with Chandan, Flowers, Incense, Lamp and Fruits</p> </div> </div>
+<div style="background: linear-gradient(135deg, #a8edea, #fed6e3); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+Day 2 - Maa Brahmacharini 🤍
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;"> <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <table style="width: 100%; border-collapse: collapse;"> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Name</td><td style="padding: 8px;">Brahmacharini</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Meaning</td><td style="padding: 8px;">A Female Student (Who Pursues The Sacred Religious Knowledge)</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Father and Mother</td><td style="padding: 8px;">Himavan and Menavati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Husband</td><td style="padding: 8px;">***</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Reincarnation</td><td style="padding: 8px;">Goddess Parvati Unmarried Form</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Chakra</td><td style="padding: 8px;">Sacral Chakra (Svadhishthana)</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Mount (Vahan)</td><td style="padding: 8px;">***</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Colour</td><td style="padding: 8px; background: #ffffff; color: #333; border: 1px solid #ddd;">White (Sign of Purity)</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #3498db;">Flower</td><td style="padding: 8px;">Jasmine & Lotuses</td></tr> </table> </div> <div style="text-align: center;"> <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Brahmacharini.jpg?width=300" alt="Brahmacharini" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"> </div> </div> <div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <h4 style="color: #3498db; margin-bottom: 15px;">🙏 Mantra</h4> <p style="font-size: 18px; color: #8e44ad; text-align: center; margin: 15px 0;"><strong>ॐ देवी ब्रह्मचारिण्यै नम:</strong><br><strong>Oṃ Devī Brahmacāriṇyai Namaḥ</strong></p> <h4 style="color: #3498db; margin: 20px 0 15px 0;">📿 Prayer</h4> <p style="font-size: 16px; color: #8e44ad; text-align: center; line-height: 1.6;"><strong>दधाना करपद्माभ्यामक्षमालाकमण्डलू।<br>देवी प्रसीदतु मयि ब्रह्मचारिण्यनुत्तमा॥<br>या देवी सर्वभू‍तेषु माँ ब्रह्मचारिणी रूपेण संस्थिता।<br>नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥</strong></p> <h4 style="color: #3498db; margin: 20px 0 15px 0;">🌟 Description</h4> <p style="font-size: 16px; line-height: 1.6;">Depicted as Walking On Bare Foot wears White Clothes and Crown. Jap Mala (Rudraksh Rosary) on her right hand along with Kamandal on her left hand.</p> <h4 style="color: #3498db; margin: 20px 0 15px 0;">🪔 Worship</h4> <p style="font-size: 16px; line-height: 1.6;">On second day of Navratri. Maa Brahmacharini is worshipped along with Lord Shiva, by Offering <strong>Milk</strong>, Flowers, rice and sandalwood.</p> </div> </div>
+<div style="background: linear-gradient(135deg, #ff9a9e, #fad0c4); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+Day 3 - Maa Chandraghanta 🌙
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;"> <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <table style="width: 100%; border-collapse: collapse;"> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Name</td><td style="padding: 8px;">Chandraghanta Devi</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Meaning</td><td style="padding: 8px;">Always ready for war against demons and have half Chandra on her forehead</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Father and Mother</td><td style="padding: 8px;">Himavan and Menavati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Husband</td><td style="padding: 8px;">Lord Shiva</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Reincarnation</td><td style="padding: 8px;">Goddess Parvati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Chakra</td><td style="padding: 8px;">Manipura Chakra</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Mount (Vahan)</td><td style="padding: 8px;">Tiger (Leopard)</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Colour</td><td style="padding: 8px; background: #e74c3c; color: white;">Red</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e74c3c;">Flower</td><td style="padding: 8px;">Jasmine</td></tr> </table> </div> <div style="text-align: center;"> <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chandraghanta_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Chandraghanta Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"> </div> </div> <div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <h4 style="color: #e74c3c; margin-bottom: 15px;">🙏 Mantra</h4> <p style="font-size: 18px; color: #8e44ad; text-align: center; margin: 15px 0;"><strong>ॐ देवी चन्द्रघण्टायै नमः॥</strong><br><strong>Om Devi Chandraghantayai Namah॥</strong></p> <h4 style="color: #e74c3c; margin: 20px 0 15px 0;">📿 Prayer</h4> <p style="font-size: 16px; color: #8e44ad; text-align: center; line-height: 1.6;"><strong>पिण्डज प्रवरारूढा चण्डकोपास्त्रकैर्युता।<br>प्रसादं तनुते मह्यम् चन्द्रघण्टेति विश्रुता॥<br>या देवी सर्वभू‍तेषु माँ चन्द्रघण्टा रूपेण संस्थिता।<br>नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥</strong></p> <h4 style="color: #e74c3c; margin: 20px 0 15px 0;">🌟 Description</h4> <p style="font-size: 16px; line-height: 1.6;">She has ten hands where two hands hold a Trishula (trident), Gada (mace), bow-arrow, khadak (sword), Kamala (lotus flower), Ghanta (bell) and kamandal (waterpot), while one of her hands remains in blessing posture. She wears a half moon depicting a Bell on her forehead and has a third eye in the middle of her forehead.</p> <h4 style="color: #e74c3c; margin: 20px 0 15px 0;">🪔 Worship</h4> <p style="font-size: 16px; line-height: 1.6;">On Ashwin Sukla Paksha Tritiya. Maa Chandraghanta Devi, by Offering Water, Milk, Honey, Flowers and sandalwood.</p> </div> </div>
+<div style="background: linear-gradient(135deg, #ffecd2, #fcb69f); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+Day 4 - Kushmanda Devi 🌕
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;"> <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <table style="width: 100%; border-collapse: collapse;"> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Name</td><td style="padding: 8px;">Kushmanda Devi</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Meaning</td><td style="padding: 8px;">Ku means "a little", Ushma means "warmth" or "energy" and Anda means "cosmic egg"</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Father and Mother</td><td style="padding: 8px;">***</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Husband</td><td style="padding: 8px;">Lord Shiva</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Reincarnation</td><td style="padding: 8px;">Goddess Parvati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Chakra</td><td style="padding: 8px;">Anahata Chakra</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Mount (Vahan)</td><td style="padding: 8px;">Lion</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Colour</td><td style="padding: 8px; background: #e74c3c; color: white;">Red</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #f39c12;">Flower</td><td style="padding: 8px;">Red color flowers</td></tr> </table> </div> <div style="text-align: center;"> <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kushmanda_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Kushmanda Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"> </div> </div> <div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <h4 style="color: #f39c12; margin-bottom: 15px;">🙏 Mantra</h4> <p style="font-size: 18px; color: #8e44ad; text-align: center; margin: 15px 0;"><strong>ॐ देवी कूष्माण्डायै नमः॥</strong><br><strong>Om Devi Kushmandayai Namah॥</strong></p> <h4 style="color: #f39c12; margin: 20px 0 15px 0;">📿 Prayer</h4> <p style="font-size: 16px; color: #8e44ad; text-align: center; line-height: 1.6;"><strong>सुरासम्पूर्ण कलशं रुधिराप्लुतमेव च।।<br>दधाना हस्तपद्माभ्यां कूष्माण्डा शुभदास्तु मे॥<br>या देवी सर्वभू‍तेषु माँ कूष्माण्डा रूपेण संस्थिता।<br>नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥</strong></p> <h4 style="color: #f39c12; margin: 20px 0 15px 0;">🌟 Description</h4> <p style="font-size: 16px; line-height: 1.6;">Kushmanda is depicted with eight to ten hands holding a trident, discus, sword, hook, mace, bow, arrow and two jars of honey (Elixir) and blood. Her one hand is always on abhayamudra from which she blesses all her devotees.</p> <h4 style="color: #f39c12; margin: 20px 0 15px 0;">🪔 Worship</h4> <p style="font-size: 16px; line-height: 1.6;">On this day, as far as possible, a bright married woman with a big forehead should be worshipped. It is preferable to feed them curd, pudding in their food. After this, fruits, dry fruits and good luck items should be offered.</p> </div> </div>
+<div style="background: linear-gradient(135deg, #a8edea, #fed6e3); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+Day 5 - Skandamata Devi 👶
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;"> <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <table style="width: 100%; border-collapse: collapse;"> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Name</td><td style="padding: 8px;">Skandamata Devi</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Meaning</td><td style="padding: 8px;">Mata Parvati was given this name after giving birth to Lord Skanda, also known as Kartikeya</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Father and Mother</td><td style="padding: 8px;">Himavan and Menavati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Husband</td><td style="padding: 8px;">Lord Shiva</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Reincarnation</td><td style="padding: 8px;">Goddess Parvati</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Chakra</td><td style="padding: 8px;">5th chakra of Kundalini – Visuddha Chakra</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Mount (Vahan)</td><td style="padding: 8px;">Lion</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Colour</td><td style="padding: 8px; background: #e74c3c; color: white;">Red</td></tr> <tr><td style="padding: 8px; font-weight: bold; color: #e91e63;">Flower</td><td style="padding: 8px;">Red color flowers</td></tr> </table> </div> <div style="text-align: center;"> <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Skandamata_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Skandamata Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);"> </div> </div> <div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"> <h4 style="color: #e91e63; margin-bottom: 15px;">🙏 Mantra</h4> <p style="font-size: 18px; color: #8e44ad; text-align: center; margin: 15px 0;"><strong>ॐ देवी स्कन्दमातायै नम:</strong><br><strong>Oṃ Devī Skandamātāyai Namaḥ</strong></p> <h4 style="color: #e91e63; margin: 20px 0 15px 0;">📿 Prayer</h4> <p style="font-size: 16px; color: #8e44ad; text-align: center; line-height: 1.6;"><strong>सिंहासनगता नित्यं पद्माश्रितकरद्वया।<br>शुभदास्तु सदा देवी स्कन्दमाता यशस्विनी॥<br>या देवी सर्वभू‍तेषु माँ स्कन्दमाता रूपेण संस्थिता।<br>नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥</strong></p> <h4 style="color: #e91e63; margin: 20px 0 15px 0;">🌟 Description</h4> <p style="font-size: 16px; line-height: 1.6;">She is pictured carrying Lotus flowers in her upper two hands, baby Murugan in one of her right hands, and Abhaya Mudra in the other. She is also seen holding Kartikey, a small child, on her lap.</p> <h4 style="color: #e91e63; margin: 20px 0 15px 0;">🪔 Worship</h4> <p style="font-size: 16px; line-height: 1.6;">By offering red flowers, Shringar Samagri</p> </div> </div>
+<div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+
+
+
+## Day 6 - Maa Katyayani 🔥
+
+<div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;">
+<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+| **Attribute** | **Details** |
+|---------------|-------------|
+| **Name** | Katyayani Devi |
+| **Meaning** | Named after sage Katyayan who performed penance to have her as his daughter |
+| **Father and Mother** | *** |
+| **Husband** | Lord Shiva |
+| **Reincarnation** | Goddess Parvati |
+| **Chakra** | Ajna Chakra |
+| **Mount (Vahan)** | Lion |
+| **Colour** | Red |
+| **Flower** | Red color flowers |
+
+</div>
+<div style="text-align: center;">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Katyayani_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Katyayani Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+</div>
+</div>
+
+<div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+### 🙏 Mantra
+**ॐ देवी कात्यायन्यै नमः॥**  
+**Om Devi Katyayanyai Namah॥**
+
+### 📿 Prayer
+**कांचनाभा वराभयं पद्मधरा मुकटोज्जवलाम्।**  
+**स्मेरमुखी शिवपत्नी कात्यायनी शुभदास्तु मे॥**  
+**या देवी सर्वभू‍तेषु माँ कात्यायनी रूपेण संस्थिता।**  
+**नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥**
+
+### 🌟 Description
+Katyayani is depicted with four hands holding a sword and lotus, while the other two hands are in blessing and protective postures. She is the warrior form of Goddess Durga, born to destroy the demon Mahishasura. She is also known as the goddess of love and is worshipped by unmarried women seeking a good husband.
+
+### 🪔 Worship
+On the sixth day of Navratri, devotees worship Maa Katyayani with red flowers, honey, and traditional sweets. Young unmarried women especially seek her blessings for a suitable life partner.
+
+</div>
+</div>
+
+---
+
+## Day 7 - Maa Kalaratri 🌑
+
+<div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;">
+<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+| **Attribute** | **Details** |
+|---------------|-------------|
+| **Name** | Kalaratri Devi |
+| **Meaning** | Kala means black/time and Ratri means night - the goddess who destroys darkness and ignorance |
+| **Father and Mother** | *** |
+| **Husband** | Lord Shiva |
+| **Reincarnation** | Goddess Durga |
+| **Chakra** | Crown Chakra |
+| **Mount (Vahan)** | Donkey |
+| **Colour** | Black/Dark |
+| **Flower** | Red color flowers |
+
+</div>
+<div style="text-align: center;">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kalratri_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Kalaratri Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+</div>
+</div>
+
+<div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+### 🙏 Mantra
+**ॐ देवी कालरात्र्यै नमः॥**  
+**Om Devi Kalaratryai Namah॥**
+
+### 📿 Prayer
+**एकवेणी जपाकर्णपूरा नग्ना खरास्थिता।**  
+**लंबोष्टी कर्णिकाकर्णी तैलाभ्यक्तशरीरिणी॥**  
+**वामपादोल्लसल्लोहलताकंठकभूषणा।**  
+**वर्धनमूर्धध्वजा कृष्णा कालरात्रिर्भयंकरी॥**
+
+### 🌟 Description
+Kalaratri is the most fierce form of Goddess Durga. She has dark complexion, disheveled hair, and rides a donkey. She has four hands - two holding a trident and a hook, while the other two are in blessing and protective poses. Despite her fearsome appearance, she protects her devotees from all negative forces and evil spirits.
+
+### 🪔 Worship
+On the seventh day of Navratri, devotees worship Maa Kalaratri to seek protection from enemies, negative energies, and evil spirits. Jaggery is offered as prasad on this day.
+
+</div>
+</div>
+
+---
+
+## Day 8 - Maa Mahagauri 🤍
+
+<div style="background: linear-gradient(135deg, #f093fb, #f5576c); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;">
+<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+| **Attribute** | **Details** |
+|---------------|-------------|
+| **Name** | Mahagauri Devi |
+| **Meaning** | Mahā means great and Gaurī means bright/clean - extremely bright complexioned |
+| **Father and Mother** | *** |
+| **Husband** | Lord Shiva |
+| **Siblings** | Ganga and Vishnu |
+| **Reincarnation** | Goddess Durga |
+| **Chakra** | *** |
+| **Mount (Vahan)** | Ox (White Bull) |
+| **Colour** | White |
+| **Flower** | Red color flowers |
+
+</div>
+<div style="text-align: center;">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mahagauri_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Mahagauri Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+</div>
+</div>
+
+<div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+### 🙏 Mantra
+**ॐ देवी महागौर्यै नमः॥**  
+**Om Devi Mahagauryai Namah॥**
+
+### 📿 Prayer
+**सर्वमंगल मांगल्ये शिवे सर्वार्थ साधिके।**  
+**शरण्ये त्र्यम्बके गौरी नारायणी नमोस्तुते॥**  
+**श्वेते वृषे समारुढा श्वेताम्बरधरा शुचिः।**  
+**महागौरी शुभं दद्यान्महादेव प्रमोददा॥**
+
+### 🌟 Description
+Mahagauri is depicted as extremely fair and beautiful, dressed in white clothes. She has four arms - holding a trident and damaru (drum), while the other two hands are in blessing and protective poses. According to legend, she became radiant white after Lord Shiva washed her with Ganga water. She is also known as Annapurna and grants prosperity and fulfillment.
+
+### 🪔 Worship
+On the eighth day of Navratri (Ashtami), devotees worship Maa Mahagauri with white flowers, coconut, and white sweets. Young girls are also worshipped on this day as representations of the goddess.
+
+</div>
+</div>
+
+---
+
+## Day 9 - Maa Siddhidatri 🪷
+
+<div style="background: linear-gradient(135deg, #a8edea, #fed6e3); padding: 30px; border-radius: 15px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+
+<div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;">
+<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+| **Attribute** | **Details** |
+|---------------|-------------|
+| **Name** | Siddhidatri Devi |
+| **Meaning** | Siddhi means supernatural power and Datri means giver - the one who grants divine powers |
+| **Father and Mother** | *** |
+| **Husband** | Lord Shiva |
+| **Reincarnation** | Goddess Durga |
+| **Chakra** | Goddess who governs the planet Ketu |
+| **Mount (Vahan)** | Lotus |
+| **Colour** | Pink |
+| **Flower** | Red color flowers |
+
+</div>
+<div style="text-align: center;">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Siddhidatri_Sanghasri_2010_Arnab_Dutta.JPG?width=300" alt="Siddhidatri Devi" style="width: 250px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+</div>
+</div>
+
+<div style="background: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+### 🙏 Mantra
+**ॐ देवी सिद्धिदात्र्यै नमः॥**  
+**Om Hreem Shri Siddhidatri Durgaaye Namaha**
+
+### 📿 Prayer
+**सिद्धगन्धर्वयक्षाघैरसुरैरमरैरपि।**  
+**सेव्यमाना सदा भूयात् सिद्धिदा सिद्धिदायिनी॥**  
+**वन्दे वांछित मनोरथार्थ चन्द्रार्घकृत शेखराम्।**  
+**कमलस्थितां चतुर्भुजा सिद्धीदात्री यशस्वनीम्॥**
+
+### 🌟 Description
+Siddhidatri is the original form of Goddess Parvati. She has four hands holding a discus, conch shell, mace, and lotus. She sits on a fully bloomed lotus or a lion. She possesses eight supernatural powers (Ashta Siddhis): Anima (becoming small), Mahima (becoming large), Garima (becoming heavy), Laghima (becoming light), Prapti (reaching anywhere), Prakambya (fulfilling desires), Ishitva (lordship), and Vashitva (control over others). Even Lord Shiva received these powers from her.
+
+### 🪔 Worship
+On the ninth and final day of Navratri (Navami), devotees worship Maa Siddhidatri with butter, kheer (sweet rice pudding), and khoi (puffed rice sweets). This day marks the completion of the nine-day festival and devotees seek her blessings for spiritual fulfillment and divine powers.
+
+</div>
+</div>
+
+---
+
+<div style="text-align: center; background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
+<h2 style="margin: 0;">🙏 May the Divine Mother Bless All 🙏</h2>
+<p style="font-size: 18px; margin: 10px 0;">This completes the nine sacred days of Dashain, celebrating the nine divine forms of Goddess Durga.</p>
+</div>
+            </article>
+
+            <!-- Chapter Navigation -->
+            <nav class="chapter-nav">
+                <a href="index.html" class="nav-btn prev">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                    <span>Table of Contents</span>
+                </a>
+                <a href="index.html" class="nav-btn next">
+                    <span>All Chapters</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </a>
+            </nav>
+
+            <footer class="book-footer">
+                <p>Prajna</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Theme Management
+        function getStoredTheme() {
+            return localStorage.getItem('prajna-theme') || 'light';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('prajna-theme', theme);
+            
+            // Update meta theme-color
+            const metaTheme = document.querySelector('meta[name="theme-color"]');
+            const themes = {
+                light: '#f5f5f0',
+                night: '#2c2416',
+                dark: '#0d0d0d'
+            };
+            if (metaTheme) metaTheme.setAttribute('content', themes[theme]);
+
+            // Update active state in dropdown
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.theme === theme);
+            });
+
+            closeThemeDropdown();
+        }
+
+        function toggleThemeDropdown() {
+            const dropdown = document.getElementById('themeDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function closeThemeDropdown() {
+            document.getElementById('themeDropdown').classList.remove('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.theme-selector')) {
+                closeThemeDropdown();
+            }
+        });
+
+        // Font Size Management
+        function getFontSize() {
+            return parseInt(localStorage.getItem('prajna-font-size') || '16');
+        }
+
+        function adjustFontSize(delta) {
+            const currentSize = getFontSize();
+            const newSize = Math.max(12, Math.min(24, currentSize + delta));
+            document.documentElement.style.fontSize = newSize + 'px';
+            localStorage.setItem('prajna-font-size', newSize.toString());
+        }
+
+        // Reading Progress
+        function updateReadingProgress() {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+            document.getElementById('readingProgress').style.width = scrolled + '%';
+        }
+
+        // Toolbar auto-hide on scroll
+        let lastScrollTop = 0;
+        let ticking = false;
+
+        function handleScroll() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    const toolbar = document.getElementById('toolbar');
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        toolbar.classList.add('hidden');
+                    } else {
+                        toolbar.classList.remove('hidden');
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                    updateReadingProgress();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Bookmark Management
+        function getBookmarks() {
+            return JSON.parse(localStorage.getItem('prajna-bookmarks') || '[]');
+        }
+
+        function isBookmarked() {
+            const bookmarks = getBookmarks();
+            return bookmarks.includes(window.location.pathname);
+        }
+
+        function toggleBookmark() {
+            const bookmarks = getBookmarks();
+            const currentPage = window.location.pathname;
+            const btn = document.getElementById('bookmarkBtn');
+            
+            if (bookmarks.includes(currentPage)) {
+                const index = bookmarks.indexOf(currentPage);
+                bookmarks.splice(index, 1);
+                btn.classList.remove('bookmarked');
+                btn.querySelector('svg').setAttribute('fill', 'none');
+            } else {
+                bookmarks.push(currentPage);
+                btn.classList.add('bookmarked');
+                btn.querySelector('svg').setAttribute('fill', 'currentColor');
+            }
+            
+            localStorage.setItem('prajna-bookmarks', JSON.stringify(bookmarks));
+        }
+
+        function updateBookmarkButton() {
+            const btn = document.getElementById('bookmarkBtn');
+            if (isBookmarked()) {
+                btn.classList.add('bookmarked');
+                btn.querySelector('svg').setAttribute('fill', 'currentColor');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply stored theme
+            setTheme(getStoredTheme());
+            
+            // Apply stored font size
+            const fontSize = getFontSize();
+            if (fontSize !== 16) {
+                document.documentElement.style.fontSize = fontSize + 'px';
+            }
+            
+            // Initialize bookmark button state
+            updateBookmarkButton();
+            
+            // Initial reading progress
+            updateReadingProgress();
+        });
+
+        // Event listeners
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    </script>
+</body>
+</html>

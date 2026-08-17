@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#f5f5f0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Chapter 12: Ten Mahavidyas - Prajna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light mode (default) */
+            --bg-primary: #f5f5f0;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f9f9f7;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #333333;
+            --border-light: #dddddd;
+            --link-color: #8b4513;
+            --link-hover: #5d2f0d;
+            --code-bg: #f4f4f4;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #8b4513;
+            --page-texture: linear-gradient(to right, rgba(0,0,0,0.02) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.02) 100%);
+        }
+
+        /* Night mode - warm sepia tones for comfortable reading */
+        [data-theme="night"] {
+            --bg-primary: #2c2416;
+            --bg-secondary: #3d3226;
+            --bg-tertiary: #4a3f32;
+            --text-primary: #e8dcc8;
+            --text-secondary: #d4c8b4;
+            --text-muted: #a89880;
+            --border-color: #7a6a52;
+            --border-light: #5a4a3a;
+            --link-color: #d4a574;
+            --link-hover: #e8c9a0;
+            --code-bg: #4a3f32;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --accent-color: #d4a574;
+            --page-texture: linear-gradient(to right, rgba(0,0,0,0.05) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.05) 100%);
+        }
+
+        /* Dark mode - true dark for AMOLED screens */
+        [data-theme="dark"] {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #252525;
+            --text-primary: #e5e5e5;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --border-color: #444444;
+            --border-light: #333333;
+            --link-color: #6db3f2;
+            --link-hover: #8cc4f7;
+            --code-bg: #252525;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --accent-color: #6db3f2;
+            --page-texture: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 0;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--link-color));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Top Toolbar */
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 999;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .toolbar.hidden {
+            transform: translateY(-100%);
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .home-link:hover {
+            color: var(--accent-color);
+        }
+
+        .toolbar-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+        }
+
+        .toolbar-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+        }
+
+        .toolbar-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Font Size Controls */
+        .font-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .font-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .font-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+        }
+
+        /* Theme Selector Dropdown */
+        .theme-selector {
+            position: relative;
+        }
+
+        .theme-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            display: none;
+            min-width: 160px;
+            z-index: 1001;
+        }
+
+        .theme-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .theme-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .theme-option.active {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+        }
+
+        .theme-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-icon.light {
+            background: linear-gradient(135deg, #fff9e6, #f5f5f0);
+            border: 1px solid #ddd;
+        }
+
+        .theme-icon.night {
+            background: linear-gradient(135deg, #4a3f32, #2c2416);
+            border: 1px solid #7a6a52;
+        }
+
+        .theme-icon.dark {
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #444;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Book Container with page effects */
+        .book-wrapper {
+            margin-top: 60px;
+            padding: 20px;
+            perspective: 2000px;
+        }
+
+        .book-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            padding: 60px 80px;
+            box-shadow: 
+                0 0 20px var(--shadow-color),
+                inset 0 0 60px rgba(0,0,0,0.02);
+            min-height: calc(100vh - 100px);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Book spine shadow effect */
+        .book-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0.1) 0%,
+                rgba(0,0,0,0.05) 30%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+
+        /* Page texture effect */
+        .book-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--page-texture);
+            pointer-events: none;
+        }
+        
+        .book-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        /* Decorative header ornament */
+        .book-header::after {
+            content: '❧';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0 15px;
+        }
+        
+        .book-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+        }
+        
+        .post-meta {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        /* Bookmark button */
+        .bookmark-btn {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .bookmark-btn:hover,
+        .bookmark-btn.bookmarked {
+            color: var(--accent-color);
+        }
+
+        .bookmark-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+        
+        .post-content {
+            font-size: 1.1em;
+            text-align: justify;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .post-content h1,
+        .post-content h2,
+        .post-content h3,
+        .post-content h4,
+        .post-content h5,
+        .post-content h6 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            text-align: left;
+        }
+        
+        .post-content h1 {
+            font-size: 1.9em;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 15px;
+        }
+        
+        .post-content h2 {
+            font-size: 1.5em;
+        }
+        
+        .post-content h3 {
+            font-size: 1.25em;
+        }
+        
+        .post-content p {
+            margin-bottom: 1.5em;
+            text-indent: 1.5em;
+        }
+
+        .post-content p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Drop cap for first paragraph */
+        .post-content p:first-of-type::first-letter {
+            float: left;
+            font-size: 3.5em;
+            line-height: 0.8;
+            padding-right: 10px;
+            padding-top: 5px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        .post-content ul,
+        .post-content ol {
+            margin: 1.5em 0 1.5em 2em;
+        }
+        
+        .post-content li {
+            margin-bottom: 0.75em;
+            text-align: left;
+        }
+        
+        .post-content code {
+            background: var(--code-bg);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .post-content pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2em 0;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 25px;
+            margin: 2em 0;
+            font-style: italic;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--link-color);
+            transition: all 0.2s ease;
+        }
+        
+        .post-content a:hover {
+            color: var(--link-hover);
+            border-bottom-color: var(--link-hover);
+        }
+        
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 2em auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2em 0;
+        }
+
+        .post-content th,
+        .post-content td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .post-content th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .post-content tr:nth-child(even) {
+            background: var(--bg-tertiary);
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border-light);
+            gap: 20px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .nav-btn.prev {
+            justify-content: flex-start;
+        }
+
+        .nav-btn.next {
+            justify-content: flex-end;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Footer */
+        .book-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .book-footer::before {
+            content: '✦';
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--accent-color);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .book-container {
+                padding: 50px 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+
+            .toolbar {
+                height: 56px;
+                padding: 0 15px;
+            }
+
+            .toolbar-btn {
+                padding: 8px 10px;
+                min-width: 38px;
+                min-height: 38px;
+            }
+
+            .font-controls {
+                display: none;
+            }
+
+            .book-wrapper {
+                padding: 10px;
+                margin-top: 56px;
+            }
+
+            .book-container {
+                padding: 35px 25px;
+                border-radius: 0;
+                min-height: calc(100vh - 76px);
+            }
+
+            .book-container::before {
+                width: 15px;
+            }
+            
+            .book-title {
+                font-size: 1.6em;
+                line-height: 1.25;
+            }
+
+            .book-header {
+                margin-bottom: 35px;
+                padding-bottom: 25px;
+            }
+
+            .book-header::after {
+                font-size: 20px;
+            }
+            
+            .post-content {
+                font-size: 1em;
+                text-align: left;
+                hyphens: none;
+            }
+
+            .post-content p {
+                text-indent: 0;
+                margin-bottom: 1.25em;
+            }
+
+            .post-content p:first-of-type::first-letter {
+                font-size: 2.8em;
+            }
+
+            .post-content h1 {
+                font-size: 1.5em;
+            }
+
+            .post-content h2 {
+                font-size: 1.3em;
+            }
+
+            .post-content h3 {
+                font-size: 1.15em;
+            }
+
+            .post-content ul,
+            .post-content ol {
+                margin-left: 1.5em;
+            }
+
+            .post-content pre {
+                padding: 15px;
+                margin: 1.5em -10px;
+                border-radius: 0;
+            }
+
+            .post-content blockquote {
+                margin: 1.5em -10px;
+                padding: 12px 20px;
+            }
+
+            .chapter-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .bookmark-btn {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+
+            .toolbar {
+                height: 52px;
+                padding: 0 12px;
+            }
+
+            .home-link span {
+                display: none;
+            }
+
+            .book-wrapper {
+                padding: 5px;
+                margin-top: 52px;
+            }
+
+            .book-container {
+                padding: 25px 18px;
+            }
+
+            .book-title {
+                font-size: 1.4em;
+            }
+
+            .post-content p:first-of-type::first-letter {
+                font-size: 2.4em;
+                padding-right: 8px;
+            }
+
+            .post-meta {
+                font-size: 0.85em;
+            }
+        }
+        
+        @media print {
+            .toolbar,
+            .reading-progress,
+            .chapter-nav,
+            .bookmark-btn {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: #000;
+            }
+
+            .book-wrapper {
+                margin-top: 0;
+                padding: 0;
+            }
+            
+            .book-container {
+                box-shadow: none;
+                padding: 0;
+                max-width: none;
+            }
+
+            .book-container::before,
+            .book-container::after {
+                display: none;
+            }
+        }
+
+        /* Smooth transitions for theme changes */
+        .book-container,
+        .toolbar,
+        .toolbar-btn,
+        .theme-dropdown {
+            transition: background-color 0.3s ease, 
+                        border-color 0.3s ease, 
+                        color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .toolbar-btn,
+            .font-btn,
+            .nav-btn,
+            .theme-option {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            .post-content a {
+                padding: 2px 0;
+            }
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- Toolbar -->
+    <nav class="toolbar" id="toolbar">
+        <div class="toolbar-left">
+            <a href="index.html" class="home-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                </svg>
+                <span>Prajna</span>
+            </a>
+        </div>
+        <div class="toolbar-right">
+            <!-- Font Size Controls -->
+            <div class="font-controls">
+                <button class="font-btn" onclick="adjustFontSize(-1)" title="Decrease font size">A-</button>
+                <button class="font-btn" onclick="adjustFontSize(1)" title="Increase font size">A+</button>
+            </div>
+
+            <!-- Theme Selector -->
+            <div class="theme-selector">
+                <button class="toolbar-btn" id="themeBtn" onclick="toggleThemeDropdown()" title="Change theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <div class="theme-dropdown" id="themeDropdown">
+                    <div class="theme-option" data-theme="light" onclick="setTheme('light')">
+                        <div class="theme-icon light"></div>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="night" onclick="setTheme('night')">
+                        <div class="theme-icon night"></div>
+                        <span>Night</span>
+                    </div>
+                    <div class="theme-option" data-theme="dark" onclick="setTheme('dark')">
+                        <div class="theme-icon dark"></div>
+                        <span>Dark</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="book-wrapper">
+        <div class="book-container">
+            <div class="book-header">
+                <!-- Bookmark Button -->
+                <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()" title="Bookmark this page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <h1 class="book-title">Chapter 12: Ten Mahavidyas</h1>
+                <div class="post-meta">
+                    Published on 2025-09-02
+                     by Sumit Yadav [Rocker Ritesh]
+                </div>
+            </div>
+            <article class="post-content">
+                <p><img src="assets/ten-mahavidyas/mahavidyas.png" alt="Mahavidyas" width="100%"></p>
+<h1 id="exploring-the-ten-mahavidyas-the-profound-wisdom-goddesses-of-tantra">Exploring the Ten Mahavidyas: The Profound Wisdom Goddesses of Tantra</h1>
+<p>Jai Shree Ganesh! Welcome to this super detailed blog post on the Ten Mahavidyas, the powerful and enigmatic group of Hindu Tantric goddesses who embody various aspects of the divine feminine energy, Shakti. These Mahavidyas—Kali, Tara, Tripura Sundari (Shodashi), Bhuvaneshvari, Bhairavi, Chhinnamasta, Dhumavati, Bagalamukhi, Matangi, and Kamala—represent the ultimate knowledge (vidya) and are central to Shaktism, particularly in Tantric traditions. They symbolize destruction, creation, beauty, wisdom, and transcendence, drawing from Shaivism, Vaishnavism, and even Buddhist influences.</p>
+<p>In this extensive exploration, we'll dive deep into each Mahavidya, covering their origin stories, physical appearances, associated chakras, mantras, yantras, powers, benefits of worship, temples, festivals, symbolism, Tantric aspects, and variations. To make it organized and easy to navigate, I've presented the key details for each goddess in a comprehensive table. This blog is as large and detailed as possible, drawing from reliable sources like Wikipedia and other web resources for accuracy and depth. Whether you're a devotee, a spiritual seeker, or just curious about Hindu mythology, this guide aims to illuminate the profound mysteries of these divine forms.</p>
+<p>Let's begin our journey through the Ten Mahavidyas.</p>
+<h2 id="1-kali-the-devourer-of-time-and-ultimate-reality">1. Kali: The Devourer of Time and Ultimate Reality</h2>
+<p>Kali, the first Mahavidya, is the fierce embodiment of time, death, and liberation. She is the ultimate form of Brahman in Tantric traditions and is revered for her power to destroy ignorance and ego. Her worship emphasizes transcendence and the cycle of creation and destruction.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Kali emerges as the personification of Durga's rage in the Devi Mahatmya (6th century CE), defeating the demon Raktabija by drinking his blood to prevent duplication. In another tale, she manifests from Vishnu as Yoga Nidra to protect Brahma from Madhu-Kaitabha. Parvati merges with Shiva to defeat Daruka, turning black in rage. In the Devi Bhagavata Purana, she battles Shumbha and Nishumbha. As Chamunda, she slays Chanda and Munda. In Mahavidya origins, she arises from Sati or Parvati to surround Shiva. Associated with Krishna in Todala-Tantra.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Black or dark blue skin, emaciated, long tangled hair, red eyes, lolling tongue. Naked or with tiger skin, necklace of skulls, skirt of severed arms. Four arms: severed head and sword (left), abhaya and varada mudras (right). Stands on Shiva with right foot forward (dakṣiṇācāra). Mahakali: ten heads, arms, legs. Dakshinakali: benevolent, right foot on Shiva. Samhara Kali: two-armed, stands on corpse. Accompanied by serpents, jackal; mount: lion.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Heart chakra (Anahata) – controls biological and clairvoyant heart, blood. In some traditions, Muladhara (Root) for grounding and destruction.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"Oṁ jayanti maṅgala kālī bhadrakālī kapālinī durgā kṣamā śivā dhātrī svāhā svadhā namostute"; "Oṁ krīṃ kālīkāyai namaḥ"; "Sarvamangal-māngalyē śivē sarvārthasādhikē. Śaraṇyē tryambakē Gauri nārāyaṇi namō'stu tē. Oṃ jayantī mangala kālī bhadrakālī kapālinī. Durgā kṣamā śivā dhātrī svāhā svadhā namō'stu‍tē. Oṃ kālī kālī mahākālī kālikē parameśvarī. Sarvānandakarī devī nārāyaṇi namō'stu te."</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Kali Yantra – geometric design for Tantric meditation, often with interlocking triangles symbolizing destruction and creation.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Devourer of time, grants moksha (liberation), defeats demons, destroys ego and ignorance. Transcendental knowledge, protection for devotees.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Liberation from fear, ego dissolution, courage in facing death, spiritual awakening.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Kalighat Temple (Kolkata), Dakshineswar Kali Temple. Festivals: Kali Puja (during Diwali), Navratri.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes ultimate reality, destruction of Maya. Tantric: Kalikula tradition, worshipped by warriors. Variations: Mahakali (absolute night), Dakshinakali (benevolent), Samhara Kali (destructive). Associated with Matsya (Todala-Tantra), Rama (Guhyati guyha-tantra).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-tara-the-guide-and-protector">2. Tara: The Guide and Protector</h2>
+<p>Tara, the second Mahavidya, is the goddess of compassion, energy, and salvation. She guides devotees across the ocean of worldly existence and is influenced by Buddhist traditions.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Tara originates from Vasiṣṭha's worship in Mahācīna (Tibet), succeeding through kaula rites. Manifests as Shiva's mother post-Samudra Manthana to heal him. In Mahavidya legends, arises from Sati/Parvati. Associated with Atharvaveda; Bhairava: Akṣobhya. Syncretized with Buddhist Tara.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Light blue complexion, disheveled hair, crown with half-moon, three eyes, snake around throat, tiger-skin, garland of skulls. Four hands: lotus, scimitar, demon head, scissors. Left foot on Shiva. Variations: Ekajaṭa, Ugra-Tara, Mahogra, Kameshvari-Tara, Chamunda, Nila-Sarasvati, Vajra-Tara, Bhadrakali.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Throat chakra (Vishuddha) – clairvoyant throat, for speech and compassion.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>Not explicitly detailed; general Tantric mantras from Tārātantra.</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Not explicitly detailed.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Grants salvation, protects from dangers (Ugratārā), source of all energy.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Ultimate knowledge, protection, energy boost.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Tarapith Temple (West Bengal). Festivals: Tara Puja.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes guidance, compassion. Tantric: Worship in Tārātantra, Brahmayāmala; devotional through Ramprasad Sen. Variations: Ugratārā (fierce), Nīla Sarasvatī (esoteric knowledge). Associated with Matsya (Todala-Tantra), Rama (Guhyati guyha-tantra).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-tripura-sundari-shodashi-the-beauty-of-the-three-worlds">3. Tripura Sundari (Shodashi): The Beauty of the Three Worlds</h2>
+<p>Tripura Sundari, also known as Shodashi or Lalita, is the third Mahavidya, representing beauty, bliss, and supreme consciousness.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Ruler of Manidvipa; defeats Bhandasura in Lalita Sahasranama. Exists before creation, creates Trimurti. Assumes Krishna form. In Mahavidya legends, from Sati/Parvati. Associated with Srikula.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Molten gold complexion, three placid eyes, red/pink vestments, ornaments. Four hands: goad, lotus, bow, arrow. Seated on throne or lotus from Shiva's navel. Variations: 16-year-old girl, Vamakeshvara form with tiger skin, trident.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Third eye chakra (Ajna) – clairvoyant third eye for intuition and bliss.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"Oṃ Śrī Mātre Namaḥ"; Lalita Sahasranama hymn.</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Sri Yantra – nine interlocking triangles, central bindu.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Grants liberation, rules cosmos, bestows bliss.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Beauty, harmony, spiritual enlightenment.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Tripura Sundari Temple (Tripura). Festivals: Lalita Jayanti.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes three worlds' beauty. Tantric: Shri Vidya school. Variations: Shodashi, Kamakshi, Rajarajeshvari. Associated with Parashurama (Todala-Tantra), Kalki (Guhyati guyha-tantra).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-bhuvaneshvari-the-world-mother">4. Bhuvaneshvari: The World Mother</h2>
+<p>Bhuvaneshvari, the fourth Mahavidya, embodies the cosmos and space, as the queen of the universe.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Created after Surya empowered by Tripura Sundari; pervades triple worlds. In Mahavidya legends, from Sati/Parvati.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Fair golden complexion, three content eyes, red/yellow garments, ornaments. Four hands: goad, noose, open palms. Seated on throne.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Heart chakra (Anahata) – embodies physical cosmos and energy. Crown in some lists.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>Not explicitly detailed.</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Not explicitly detailed.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Embodies cosmos, grants space and abundance.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Prosperity, harmony with nature.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Bhuvaneshwari Temple (Bhuvanagiri, Karnataka). Festivals: Navaratri, Bhuvaneshwari Jayanti, Adi-Puram.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes infinite space. Tantric: Form of Adi Parashakti. Variations: Linked to tri-bhuvana.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-bhairavi-the-fierce-one">5. Bhairavi: The Fierce One</h2>
+<p>Bhairavi, the fifth Mahavidya, is the goddess of Kundalini and destruction, consort of Bhairava.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Consort of Bhairava; leader of 64 yoginis. In Mahavidya legends, from Sati/Parvati.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Red garments, garland of severed heads, three eyes, crescent moon. Holds rosaries, manuscripts, trident, sword, noose, bow. Blood on breasts. Variations: Beautiful woman or fierce.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Crown chakra (Sahasrara) – clairvoyant crown for wisdom. Third eye in some traditions.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"Om Hasaim Hasakarim Hasaim Bhairavyay Namo Namah."</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Tripura-Bhairavi Yantra.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Kundalini awakening, wisdom, destruction of enemies.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Spiritual adeptness, protection.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Bhairavi temples in charnel grounds. Festivals: Navratri.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes terror and benevolence. Tantric: Associated with 64 yoginis, 52 Bhairavs. Variations: Shubhankari (auspicious).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-chhinnamasta-the-self-decapitated-goddess">6. Chhinnamasta: The Self-Decapitated Goddess</h2>
+<p>Chhinnamasta, the sixth Mahavidya, represents self-sacrifice and the awakening of Kundalini.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Parvati beheads herself to feed attendants Dakini and Varnini. Aids gods in demon wars. Buddhist origins from Chinnamunda. In Mahavidya legends, from Sati/Parvati. Linked to Renuka, Vishnu avatars.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Self-decapitated, nude, red/orange complexion, holding head and scimitar. Three blood jets to head and attendants. Stands on copulating couple. Adorned with serpents, mundamala.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Throat chakra (Vishuddha) – for self-expression; crown in some lists.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>Not explicitly detailed; from Pranatoshini Tantra.</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Not explicitly detailed.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Self-sacrifice for welfare, Kundalini awakening, victory over enemies.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Courage, transcendence of ego.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Chhinnamasta temples in cremation grounds. Festivals: Viraratri.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes prana control, sexual dominance. Tantric: Fierce aspect of Mahadevi. Variations: Prachanda Chandika.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-dhumavati-the-smoky-widow">7. Dhumavati: The Smoky Widow</h2>
+<p>Dhumavati, the seventh Mahavidya, embodies misfortune, death, and the void.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Arises from Sati's smoke or suicide; eats Shiva, becomes widow. Created by Durga to defeat demons. Linked to Nirriti, Alakshmi. In Mahavidya legends, from Sati/Parvati.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Old, ugly widow, pale-grey/black, dishevelled hair, crooked nose, missing teeth. Holds winnowing basket, boon gesture. Rides horseless chariot with crow banner. Variations: Young, beautiful in modern art.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Crown chakra (Sahasrara) – heart/middle region in some, for void and silence.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"Dhum Dhum Dhumavati Svaha."</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Dhumavati Yantra for protection.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Grants siddhis, rescues from troubles, destroys enemies.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Moksha, protection from negativity. Ideal for renouncers.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Dhumavati temples in cremation grounds. Festivals: Krishna Paksha.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes inauspiciousness, void. Tantric: Worship at night, bare-bodied. Variations: Linked to Matsya, Vamana.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-bagalamukhi-the-paralyzer">8. Bagalamukhi: The Paralyzer</h2>
+<p>Bagalamukhi, the eighth Mahavidya, is the goddess of stambhana, paralyzing enemies.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Manifests from Haridra Sarovar to calm storm. Defeats Madan by pulling tongue. Worshipped by Rama, Pandavas for victory.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Golden/yellow complexion, yellow clothes, ornaments. Holds club, pulls demon's tongue. Four arms, third eye, crescent moon. Variations: Crane head.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Crown chakra (Sahasrara) – for control and silence.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"ह्लीं" (Hleem).</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Not explicitly detailed.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Stambhana (paralysis of foes), siddhis, riddhis. Makes conversationalists speechless, rich poor, etc.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Victory over enemies, supernatural powers.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Bankhandi Temple (Kangra), Pitambara Peeth (Datia). Festivals: Bagalamukhi Jayanti.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes control over speech. Tantric: For defeating adversaries. Variations: Dwi-Bhuja, Chaturbhuja.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-matangi-the-outcast-goddess">9. Matangi: The Outcast Goddess</h2>
+<p>Matangi, the ninth Mahavidya, is the Tantric form of Saraswati, goddess of music, knowledge, and the arts.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Arises from leftovers (Uchchhishta-Matangini). Parvati as Chandala huntress. Daughter of Matanga. In Mahavidya legends, from Sati/Parvati. Kauri-bai legend.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Emerald green, red garments, gunja garland. Holds skull bowl, sword. Variations: Raja-Matangi with veena, parrots; four-armed with noose, goad, bow, arrows.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Throat chakra (Vishuddha) – origin of speech, Saraswati channel. Crown in some lists.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"Aim"; "Om Hrim Aim Shrim Namo Bhagvati Ucchishtachandali Shri Matangeswari Sarvajanavasankari Swaha." Repeat 10,000 times.</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Not explicitly detailed.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Control over creatures, material desires, speech mastery.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Artistic talent, knowledge, influence.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Matangi temples in Varanasi. Festivals: Matangi Puja.</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes outcasts, speech. Tantric: Offerings of leftovers. Variations: Uchchhishta-Matangini, Raja-Matangini.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-kamala-lakshmi-the-lotus-goddess">10. Kamala (Lakshmi): The Lotus Goddess</h2>
+<p>Kamala, the tenth Mahavidya, is a Tantric form of Lakshmi, goddess of wealth and prosperity.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Story/Mythology</strong></td>
+<td>Emerges from Ocean of Milk churning; daughter of Bhrigu. Consort of Vishnu. In Mahavidya legends, from Sati/Parvati. Identified with Durga, other Shaktis.</td>
+</tr>
+<tr>
+<td><strong>Appearance/Iconography</strong></td>
+<td>Golden complexion, four hands (dharma, kama, artha, moksha). Holds lotus, sits on lotus throne. With elephants (Gaja-Lakshmi). Variations: 18 hands with weapons.</td>
+</tr>
+<tr>
+<td><strong>Associated Chakra</strong></td>
+<td>Six chakras (Shadadharadhi); Anahata (heart) for prosperity; crown in some lists.</td>
+</tr>
+<tr>
+<td><strong>Mantra</strong></td>
+<td>"Oṃ Śrīṃ Mahālakṣmyai Namaḥ"; "Oṃ Śrīṃ Śriye Namaḥ."</td>
+</tr>
+<tr>
+<td><strong>Yantra</strong></td>
+<td>Kamala Yantra with lotus petals.</td>
+</tr>
+<tr>
+<td><strong>Powers</strong></td>
+<td>Bestows wealth, prosperity, fertility, spiritual wealth.</td>
+</tr>
+<tr>
+<td><strong>Benefits of Worship</strong></td>
+<td>Material and spiritual abundance.</td>
+</tr>
+<tr>
+<td><strong>Temples/Festivals</strong></td>
+<td>Lakshmi temples worldwide. Festivals: Diwali, Sharad Purnima, Vaibhav Lakshmi Vrata (Fridays).</td>
+</tr>
+<tr>
+<td><strong>Symbolism/Tantric Aspects/Variations</strong></td>
+<td>Symbolizes fortune, liberation. Tantric: Prakriti, three gunas. Variations: Sri, Bhu, Durga forms.</td>
+</tr>
+</tbody>
+</table>
+<p>In conclusion, the Ten Mahavidyas offer a profound path to understanding the divine feminine in all its forms—from fierce destruction to serene prosperity. Their worship in Tantra leads to self-realization and empowerment. May this detailed exploration inspire your spiritual journey. Jai Mata Di!</p>
+            </article>
+
+            <!-- Chapter Navigation -->
+            <nav class="chapter-nav">
+                <a href="index.html" class="nav-btn prev">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                    <span>Table of Contents</span>
+                </a>
+                <a href="index.html" class="nav-btn next">
+                    <span>All Chapters</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </a>
+            </nav>
+
+            <footer class="book-footer">
+                <p>Prajna</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Theme Management
+        function getStoredTheme() {
+            return localStorage.getItem('prajna-theme') || 'light';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('prajna-theme', theme);
+            
+            // Update meta theme-color
+            const metaTheme = document.querySelector('meta[name="theme-color"]');
+            const themes = {
+                light: '#f5f5f0',
+                night: '#2c2416',
+                dark: '#0d0d0d'
+            };
+            if (metaTheme) metaTheme.setAttribute('content', themes[theme]);
+
+            // Update active state in dropdown
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.theme === theme);
+            });
+
+            closeThemeDropdown();
+        }
+
+        function toggleThemeDropdown() {
+            const dropdown = document.getElementById('themeDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function closeThemeDropdown() {
+            document.getElementById('themeDropdown').classList.remove('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.theme-selector')) {
+                closeThemeDropdown();
+            }
+        });
+
+        // Font Size Management
+        function getFontSize() {
+            return parseInt(localStorage.getItem('prajna-font-size') || '16');
+        }
+
+        function adjustFontSize(delta) {
+            const currentSize = getFontSize();
+            const newSize = Math.max(12, Math.min(24, currentSize + delta));
+            document.documentElement.style.fontSize = newSize + 'px';
+            localStorage.setItem('prajna-font-size', newSize.toString());
+        }
+
+        // Reading Progress
+        function updateReadingProgress() {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+            document.getElementById('readingProgress').style.width = scrolled + '%';
+        }
+
+        // Toolbar auto-hide on scroll
+        let lastScrollTop = 0;
+        let ticking = false;
+
+        function handleScroll() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    const toolbar = document.getElementById('toolbar');
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        toolbar.classList.add('hidden');
+                    } else {
+                        toolbar.classList.remove('hidden');
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                    updateReadingProgress();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Bookmark Management
+        function getBookmarks() {
+            return JSON.parse(localStorage.getItem('prajna-bookmarks') || '[]');
+        }
+
+        function isBookmarked() {
+            const bookmarks = getBookmarks();
+            return bookmarks.includes(window.location.pathname);
+        }
+
+        function toggleBookmark() {
+            const bookmarks = getBookmarks();
+            const currentPage = window.location.pathname;
+            const btn = document.getElementById('bookmarkBtn');
+            
+            if (bookmarks.includes(currentPage)) {
+                const index = bookmarks.indexOf(currentPage);
+                bookmarks.splice(index, 1);
+                btn.classList.remove('bookmarked');
+                btn.querySelector('svg').setAttribute('fill', 'none');
+            } else {
+                bookmarks.push(currentPage);
+                btn.classList.add('bookmarked');
+                btn.querySelector('svg').setAttribute('fill', 'currentColor');
+            }
+            
+            localStorage.setItem('prajna-bookmarks', JSON.stringify(bookmarks));
+        }
+
+        function updateBookmarkButton() {
+            const btn = document.getElementById('bookmarkBtn');
+            if (isBookmarked()) {
+                btn.classList.add('bookmarked');
+                btn.querySelector('svg').setAttribute('fill', 'currentColor');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply stored theme
+            setTheme(getStoredTheme());
+            
+            // Apply stored font size
+            const fontSize = getFontSize();
+            if (fontSize !== 16) {
+                document.documentElement.style.fontSize = fontSize + 'px';
+            }
+            
+            // Initialize bookmark button state
+            updateBookmarkButton();
+            
+            // Initial reading progress
+            updateReadingProgress();
+        });
+
+        // Event listeners
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    </script>
+</body>
+</html>
